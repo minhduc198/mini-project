@@ -6,101 +6,145 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarHeader,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { useSidebarControl } from "@/hooks/use-sidebar-control";
 import { cn } from "@/lib/utils";
-import { Box, House, Package, Users } from "lucide-react";
+import { Box, House, Package, Users, Zap } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
 const sidebarItems = [
-  {
-    key: "dashboard",
-    label: "Dashboard",
-    url: "/",
-    icon: <House size={18} />,
-  },
+  { key: "dashboard", label: "Dashboard", url: "/", icon: <House size={16} /> },
   {
     key: "customers",
     label: "Customers",
     url: "/customers",
-    icon: <Users size={18} />,
+    icon: <Users size={16} />,
   },
   {
     key: "product",
     label: "Products",
     url: "/products",
-    icon: <Box size={18} />,
+    icon: <Box size={16} />,
   },
   {
     key: "orders",
     label: "Orders",
     url: "/orders",
-    icon: <Package size={18} />,
+    icon: <Package size={16} />,
   },
 ];
+
 export function AppSidebar() {
   const { isPinned, isHovering, setIsHovering } = useSidebarControl();
+  const { isMobile, setOpenMobile } = useSidebar();
   const isExpanded = isPinned || isHovering;
   const router = useRouter();
   const path = usePathname();
 
+  const handleGoToPage = (url: string) => {
+    router.push(url);
+    setOpenMobile(false);
+  };
+
+  const isActive = (url: string) =>
+    path.replace("/", "") === url.replace("/", "");
+
   return (
     <Sidebar
+      style={{ backgroundColor: "#0C0C18" }}
+      className="border-r border-white/[0.06] !bg-[#0C0C18]"
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
-      <SidebarHeader>
+      <SidebarHeader
+        style={{ backgroundColor: "#0C0C18" }}
+        className="px-4 py-5 !bg-[#0C0C18]"
+      >
         <div
-          className={cn("flex gap-2 items-center ", {
-            "justify-center": !isExpanded,
+          className={cn("flex items-center gap-2.5", {
+            "justify-center": !isMobile && !isExpanded,
           })}
         >
-          <div className="w-12.5 h-12.5">
-            <img src="/assets/images/logo.png" alt="logo" />
+          <div className="w-8 h-8 shrink-0 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-violet-500/30">
+            <Zap size={15} className="text-white" />
           </div>
-          {isExpanded && <div className="text-xl font-bold ">Mini CRM</div>}
+          {(isMobile || isExpanded) && (
+            <span className="text-[15px] font-semibold tracking-tight text-white shrink-0">
+              Mini CRM
+            </span>
+          )}
         </div>
       </SidebarHeader>
 
-      <SidebarContent>
+      <SidebarContent
+        style={{ backgroundColor: "#0C0C18" }}
+        className="px-3 !bg-[#0C0C18]"
+      >
         <SidebarGroup />
 
         <div
-          className={cn("text-gray-600 text-sm", {
-            "text-center": !isExpanded,
-          })}
+          className={cn(
+            "mb-2 px-2 text-[10px] font-semibold uppercase tracking-widest text-white/20",
+            { "text-center": !isMobile && !isExpanded },
+          )}
         >
-          MENU
+          {isExpanded || isMobile ? "Menu" : "Menu"}
         </div>
 
-        <div className="ml-4 mt-2 space-y-1 text-white">
-          {sidebarItems.map((item) => (
-            <div
-              key={item.key}
-              className={cn(
-                "flex items-center gap-2 cursor-pointer rounded-[8px] px-2 py-1 text-white bg-primary/80 hover:bg-primary",
-
-                {
-                  "bg-primary":
-                    path.replace("/", "") === item.url.replace("/", ""),
-                },
-
-                { "w-fit": !isExpanded },
-              )}
-              onClick={() => {
-                router.push(item.url);
-              }}
-            >
-              {item.icon}
-              {isExpanded && (
-                <span className="text-[16px] font-medium">{item.label}</span>
-              )}
-            </div>
-          ))}
+        <div className="space-y-0.5">
+          {sidebarItems.map((item) => {
+            const active = isActive(item.url);
+            return (
+              <button
+                key={item.key}
+                onClick={() => handleGoToPage(item.url)}
+                className={cn(
+                  "w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-150",
+                  active
+                    ? "bg-violet-500/15 text-white"
+                    : "text-white/40 hover:text-white/70 hover:bg-white/[0.04]",
+                  { "justify-center px-2": !isMobile && !isExpanded },
+                )}
+              >
+                <span
+                  className={cn(
+                    "shrink-0 transition-colors",
+                    active ? "text-violet-400" : "text-current",
+                  )}
+                >
+                  {item.icon}
+                </span>
+                {(isMobile || isExpanded) && (
+                  <span className="tracking-tight">{item.label}</span>
+                )}
+                {active && (isMobile || isExpanded) && (
+                  <div className="ml-auto w-1 h-4 rounded-full bg-violet-400" />
+                )}
+              </button>
+            );
+          })}
         </div>
       </SidebarContent>
 
-      <SidebarFooter>hello</SidebarFooter>
+      <SidebarFooter
+        style={{ backgroundColor: "#0C0C18" }}
+        className="px-3 py-4 border-t border-white/[0.06] !bg-[#0C0C18]"
+      >
+        {isMobile || isExpanded ? (
+          <div className="px-3 py-2.5 rounded-lg bg-violet-500/10 border border-violet-500/20">
+            <p className="text-[11px] text-violet-300 font-medium">Pro Plan</p>
+            <p className="text-[10px] text-white/30 mt-0.5">6 days remaining</p>
+            <div className="mt-2 h-1 bg-white/[0.06] rounded-full overflow-hidden">
+              <div className="h-full w-[60%] bg-gradient-to-r from-violet-500 to-indigo-500 rounded-full" />
+            </div>
+          </div>
+        ) : (
+          <div className="flex justify-center py-1">
+            <div className="w-2 h-2 rounded-full bg-violet-400/60" />
+          </div>
+        )}
+      </SidebarFooter>
     </Sidebar>
   );
 }

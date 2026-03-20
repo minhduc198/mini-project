@@ -1,5 +1,5 @@
 "use client";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { useSidebarControl } from "@/hooks/use-sidebar-control";
 import React from "react";
 import { AppSidebar } from "./AppSidebar";
@@ -23,10 +23,13 @@ export default function ClientLayout({
       }
     >
       <AppSidebar />
-      <main className="w-full">
-        <Header />
-        <QueryProvider>{children}</QueryProvider>
-      </main>
+
+      <Header />
+      <SidebarInset className="mt-[76px] px-4 py-6">
+        <main>
+          <QueryProvider>{children}</QueryProvider>
+        </main>
+      </SidebarInset>
     </SidebarProvider>
   );
 }
