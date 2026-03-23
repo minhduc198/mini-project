@@ -1,14 +1,16 @@
-import { TrendingDown, TrendingUp } from "lucide-react";
-import { Activity, DollarSign, Target, UserPlus } from "lucide-react";
-import LineChart from "./charts/LineChart";
-import { fetchCustomersList } from "../features/Customers/services";
-import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from "../constants";
-import { fetchOrdersList } from "../features/Orders/services";
+import { formatShortNumber } from "@/lib/utils";
+import {
+  Activity,
+  DollarSign,
+  Target,
+  TrendingDown,
+  TrendingUp,
+  UserPlus,
+} from "lucide-react";
 import { useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { Customer } from "../features/Customers/types";
 import { Order } from "../features/Orders/types";
-import { formatShortNumber } from "@/lib/utils";
+import LineChart from "./charts/LineChart";
 
 interface Props {
   customerList: Customer[];
@@ -19,7 +21,9 @@ export default function KpiCard({ customerList, orderList }: Props) {
   const kpis = useMemo(() => {
     if (!orderList || !customerList) return [];
 
-    const totalRevenue = orderList.reduce((sum, o) => sum + (o.total || 0), 0);
+    const totalRevenue = orderList
+      .filter((order) => !order.returned)
+      .reduce((sum, o) => sum + (o.total || 0), 0);
 
     const returnedOrders = orderList.filter((o) => o.returned).length;
     const deliveredOrders = orderList.filter((o) => !o.returned).length;

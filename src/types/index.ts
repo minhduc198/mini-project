@@ -38,3 +38,9 @@ export interface TableColumns<T> {
   width?: number;
   cell?: (value: unknown, row: T) => ReactNode;
 }
+
+export interface ColumnHeader<T> {
+  id: keyof T;
+  label: string;
+  cellRender?: (row: T) => React.ReactNode;
+}
