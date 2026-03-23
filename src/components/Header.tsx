@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { useSidebar } from "@/components/ui/sidebar";
-import { useSidebarControl } from "@/hooks/use-sidebar-control";
+import { useSidebarControl } from "@/src/hooks/use-sidebar-control";
 import { cn } from "@/lib/utils";
 import {
   Bell,
@@ -67,7 +67,10 @@ export default function Header() {
         "bg-[#0C0C18]/95 backdrop-blur-md z-[999] pointer-events-auto",
         "transition-[margin] duration-300 ease-in-out",
 
-        { "h-[152px] border-0 ": openMenu, "xl:ml-[290px]": isExpanded },
+        {
+          "h-[152px] pb-3 border-0 ": openMenu,
+          "xl:ml-[290px]": isExpanded,
+        },
       )}
     >
       <div className="w-full flex items-center justify-between xl:justify-start gap-3 px-4 h-[64px]">

@@ -1,6 +1,6 @@
 "use client";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { useSidebarControl } from "@/hooks/use-sidebar-control";
+import { useSidebarControl } from "@/src/hooks/use-sidebar-control";
 import React from "react";
 import { AppSidebar } from "./AppSidebar";
 import Header from "./Header";
