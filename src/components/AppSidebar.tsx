@@ -8,7 +8,7 @@ import {
   SidebarHeader,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useSidebarControl } from "@/hooks/use-sidebar-control";
+import { useSidebarControl } from "@/src/hooks/use-sidebar-control";
 import { cn } from "@/lib/utils";
 import { Box, House, Package, Users, Zap } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";

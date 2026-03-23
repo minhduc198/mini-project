@@ -1,21 +1,17 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { formatShortNumber } from "@/lib/utils";
 import KpiCard from "@/src/components/KpiCard";
-import {
-  ArrowUpRight,
-  Calendar,
-  ChevronRight,
-  Globe,
-  Mail,
-  Phone,
-  Star,
-  TrendingDown,
-  TrendingUp,
-} from "lucide-react";
-import { useState } from "react";
+import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from "@/src/constants";
+import { fetchCustomersList } from "@/src/features/Customers/services";
+import { fetchOrdersList } from "@/src/features/Orders/services";
+import { GetOrdersListResponse } from "@/src/features/Orders/types";
+import { useQuery } from "@tanstack/react-query";
+import { ArrowUpRight, ChevronRight } from "lucide-react";
+import { useMemo, useState } from "react";
 
 // ─── Mock Data ────────────────────────────────────────────────────────────────
 
@@ -65,13 +61,6 @@ const deals = [
     date: "Apr 10",
     avatar: "AC",
   },
-];
-
-const topReps = [
-  { name: "Sarah Johnson", revenue: "$420K", pct: 92, avatar: "SJ" },
-  { name: "Marcus Lee", revenue: "$315K", pct: 76, avatar: "ML" },
-  { name: "Priya Kapoor", revenue: "$278K", pct: 65, avatar: "PK" },
-  { name: "Dylan Frost", revenue: "$201K", pct: 48, avatar: "DF" },
 ];
 
 const stageStyle: Record<string, string> = {
@@ -168,11 +157,65 @@ function RevenueChart() {
 
 export default function Dashboard() {
   const [activeRange, setActiveRange] = useState("6M");
+  // const [customerListRq, setCustomerListRq] = useState<GetCustomersListRequest>(
+  //   {
+  //     pagination: {
+  //       page: DEFAULT_PAGE,
+  //       perPage: DEFAULT_PER_PAGE,
+  //     },
+  //   },
+  // );
+
+  const { data: customerListData } = useQuery({
+    queryKey: ["customer_list"],
+    queryFn: () =>
+      fetchCustomersList({
+        pagination: {
+          page: DEFAULT_PAGE,
+          perPage: DEFAULT_PER_PAGE,
+        },
+      }),
+    refetchOnWindowFocus: false,
+  });
+  const customerList = customerListData?.data ?? [];
+
+  const { data: orderListData } = useQuery<GetOrdersListResponse>({
+    queryKey: ["order_list"],
+    queryFn: () =>
+      fetchOrdersList({
+        pagination: {
+          page: DEFAULT_PAGE,
+          perPage: 9999,
+        },
+      }),
+    refetchOnWindowFocus: false,
+  });
+  const orderList = orderListData?.data ?? [];
+
+  const topReps = useMemo(() => {
+    const topSpent = customerList
+      .sort((a, b) => b.total_spent - a.total_spent)
+      .slice(0, 6);
+
+    const totalTopReps = topSpent.reduce(
+      (init, current) => init + current.total_spent,
+      0,
+    );
+
+    return topSpent.map((item) => {
+      return {
+        name: `${item.first_name} ${item.last_name}`,
+        revenue: formatShortNumber(item.total_spent),
+        pct: (item.total_spent / totalTopReps) * 100,
+        avatar: item.avatar,
+      };
+    });
+  }, [customerList]);
 
   return (
     <div className="min-h-screen bg-[#080810] text-white">
       <div className="p-6 space-y-5 max-w-[1600px] mx-auto">
-        <KpiCard />
+        <KpiCard customerList={customerList} orderList={orderList} />
 
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
           <div className="xl:col-span-2 rounded-xl border border-white/[0.07] bg-[#0F0F1C] p-5">
@@ -212,11 +255,9 @@ export default function Dashboard() {
                     <div className="text-[10px] text-white/20 w-3 shrink-0 font-mono">
                       {i + 1}
                     </div>
-                    <Avatar className="w-7 h-7 shrink-0">
-                      <AvatarFallback className="bg-gradient-to-br from-violet-500/40 to-indigo-600/40 text-white/70 text-[9px]">
-                        {r.avatar}
-                      </AvatarFallback>
-                    </Avatar>
+                    <div className="w-7 h-7 shrink-0 rounded-full overflow-hidden">
+                      <img src={r.avatar} alt="" />
+                    </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-1.5">
                         <span className="text-[11px] text-white/70 truncate">

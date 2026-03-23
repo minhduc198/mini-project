@@ -1,51 +1,79 @@
 import { TrendingDown, TrendingUp } from "lucide-react";
 import { Activity, DollarSign, Target, UserPlus } from "lucide-react";
 import LineChart from "./charts/LineChart";
+import { fetchCustomersList } from "../features/Customers/services";
+import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from "../constants";
+import { fetchOrdersList } from "../features/Orders/services";
+import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Customer } from "../features/Customers/types";
+import { Order } from "../features/Orders/types";
+import { formatShortNumber } from "@/lib/utils";
 
-const kpis = [
-  {
-    label: "Total Revenue",
-    value: "$2.4M",
-    change: "+18.2%",
-    up: true,
-    icon: DollarSign,
-    color: "from-violet-500/20 to-violet-500/0",
-    accent: "#8B5CF6",
-    sub: "vs last quarter",
-  },
-  {
-    label: "New Contacts",
-    value: "1,284",
-    change: "+6.4%",
-    up: true,
-    icon: UserPlus,
-    color: "from-cyan-500/20 to-cyan-500/0",
-    accent: "#06B6D4",
-    sub: "this month",
-  },
-  {
-    label: "Returned Orders",
-    value: "347",
-    change: "+22.1%",
-    up: true,
-    icon: Target,
-    color: "from-emerald-500/20 to-emerald-500/0",
-    accent: "#10B981",
-    sub: "won this quarter",
-  },
-  {
-    label: "Delivered Orders",
-    value: "2.8%",
-    change: "-0.4%",
-    up: false,
-    icon: Activity,
-    color: "from-rose-500/20 to-rose-500/0",
-    accent: "#F43F5E",
-    sub: "monthly average",
-  },
-];
+interface Props {
+  customerList: Customer[];
+  orderList: Order[];
+}
 
-export default function KpiCard() {
+export default function KpiCard({ customerList, orderList }: Props) {
+  const kpis = useMemo(() => {
+    if (!orderList || !customerList) return [];
+
+    const totalRevenue = orderList.reduce((sum, o) => sum + (o.total || 0), 0);
+
+    const returnedOrders = orderList.filter((o) => o.returned).length;
+    const deliveredOrders = orderList.filter((o) => !o.returned).length;
+
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
+    const newContacts = customerList.filter((c) => {
+      return c.last_seen && new Date(c.last_seen) <= oneMonthAgo;
+    }).length;
+
+    return [
+      {
+        label: "Total Revenue",
+        value: formatShortNumber(totalRevenue),
+        change: "+18.2%",
+        up: true,
+        icon: DollarSign,
+        color: "from-violet-500/20 to-violet-500/0",
+        accent: "#8B5CF6",
+        sub: "vs last quarter",
+      },
+      {
+        label: "New Contacts",
+        value: newContacts,
+        change: "+6.4%",
+        up: true,
+        icon: UserPlus,
+        color: "from-cyan-500/20 to-cyan-500/0",
+        accent: "#06B6D4",
+        sub: "this month",
+      },
+      {
+        label: "Returned Orders",
+        value: returnedOrders,
+        change: "+22.1%",
+        up: true,
+        icon: Target,
+        color: "from-emerald-500/20 to-emerald-500/0",
+        accent: "#10B981",
+        sub: "won this quarter",
+      },
+      {
+        label: "Delivered Orders",
+        value: deliveredOrders,
+        change: "-0.4%",
+        up: false,
+        icon: Activity,
+        color: "from-rose-500/20 to-rose-500/0",
+        accent: "#F43F5E",
+        sub: "monthly average",
+      },
+    ];
+  }, [orderList, customerList]);
   return (
     <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
       {kpis.map((k) => {
