@@ -1,5 +1,5 @@
 import { formatShortNumber } from "@/lib/utils";
-import { Order } from "@/src/features/Orders/types";
+import { Order } from "@/src/features/order/types";
 import dayjs from "dayjs";
 import ReactApexChart from "react-apexcharts";
 

@@ -1,6 +1,8 @@
 import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from "@/src/constants";
 import { SORT } from "@/src/types";
 import {
+  CreateOrderRequest,
+  CreateOrderResponse,
   GetOrderDetailRequest,
   GetOrderDetailResponse,
   GetOrdersListRequest,
@@ -90,6 +92,24 @@ export class OrdersService {
     }
   }
 
+  static async createOrder(
+    payload: CreateOrderRequest,
+  ): Promise<CreateOrderResponse> {
+    try {
+      const response = await http.post("/orders", payload);
+
+      return {
+        data: response.data.data as Order,
+      };
+    } catch (error) {
+      throw new Error(
+        `Lỗi khi tạo order: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`,
+      );
+    }
+  }
+
   static async getOrdersStats(filter: GetOrdersListRequest["filter"] = {}) {
     try {
       const response = await OrdersService.getOrdersList({
@@ -139,3 +159,6 @@ export const deleteOrders = (ids: number[]) => OrdersService.deleteMany(ids);
 
 export const fetchOrdersStats = (filter?: GetOrdersListRequest["filter"]) =>
   OrdersService.getOrdersStats(filter);
+
+export const createOrder = (payload: CreateOrderRequest) =>
+  OrdersService.createOrder(payload);

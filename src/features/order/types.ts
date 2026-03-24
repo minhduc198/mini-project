@@ -6,7 +6,7 @@ import {
   TableColumns,
   UrlQuery,
 } from "@/src/types";
-import { Customer } from "../Customers/types";
+import { Customer } from "../customer/types";
 
 export type OrderStatus = "ordered" | "delivered" | "cancelled";
 
@@ -117,3 +117,19 @@ export interface OrderDetailProduct {
   quantity: number;
   total: number;
 }
+
+export type CreateOrderRequest = {
+  customer_id: number;
+  address?: string;
+  tax_rate?: number;
+  delivery_fees?: number;
+  basket: {
+    product_id: number;
+    quantity: number;
+    price?: number;
+  }[];
+};
+
+export type CreateOrderResponse = {
+  data: Order;
+};

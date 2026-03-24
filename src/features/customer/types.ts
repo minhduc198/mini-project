@@ -1,5 +1,7 @@
 import { ApiResponse, ApiResponseList, SORT, UrlQuery } from "@/src/types";
 
+export type Group = "regular" | "ordered_once" | "collector" | "reviewer";
+
 export type Customer = {
   id: number;
   first_name: string;
@@ -16,7 +18,7 @@ export type Customer = {
   has_ordered: boolean;
   latest_purchase: string | null;
   has_newsletter: boolean;
-  groups: string[];
+  groups: Group[];
   nb_orders: number;
   total_spent: number;
 };
@@ -85,3 +87,5 @@ export type UpdateCustomerResponse = ApiResponse<Customer>;
 export interface CreateCustomerRequest {
   data: Partial<Omit<Customer, "id">>;
 }
+
+export type SortKey<T> = keyof T;
