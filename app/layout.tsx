@@ -1,5 +1,6 @@
 import ClientLayout from "@/src/components/ClientLayout";
 import "./globals.css";
+import { Toaster } from "react-hot-toast";
 
 import { Inter, JetBrains_Mono } from "next/font/google";
 
@@ -22,6 +23,7 @@ export default function RootLayout({
     <html lang="vi">
       <body className={`${fontSans.variable} ${fontMono.variable} antialiased`}>
         <ClientLayout>{children}</ClientLayout>
+        <Toaster position="top-right" />
       </body>
     </html>
   );

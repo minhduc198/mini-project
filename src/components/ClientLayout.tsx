@@ -1,10 +1,18 @@
 "use client";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { useSidebarControl } from "@/src/hooks/use-sidebar-control";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import { AppSidebar } from "./AppSidebar";
 import Header from "./Header";
-import QueryProvider from "../providers/queryProvider";
+
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 export default function ClientLayout({
   children,
@@ -13,6 +21,7 @@ export default function ClientLayout({
 }>) {
   const { isPinned, isHovering } = useSidebarControl();
   const isExpanded = isPinned || isHovering;
+
   return (
     <SidebarProvider
       style={
@@ -26,9 +35,9 @@ export default function ClientLayout({
 
       <Header />
       <SidebarInset className="mt-[76px] px-4 py-6">
-        <main>
-          <QueryProvider>{children}</QueryProvider>
-        </main>
+        <QueryClientProvider client={queryClient}>
+          <main>{children}</main>
+        </QueryClientProvider>
       </SidebarInset>
     </SidebarProvider>
   );

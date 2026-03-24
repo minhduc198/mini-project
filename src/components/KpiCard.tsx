@@ -8,8 +8,8 @@ import {
   UserPlus,
 } from "lucide-react";
 import { useMemo } from "react";
-import { Customer } from "../features/Customers/types";
-import { Order } from "../features/Orders/types";
+import { Customer } from "../features/customer/types";
+import { Order } from "../features/order/types";
 import LineChart from "./charts/LineChart";
 
 interface Props {

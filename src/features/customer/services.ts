@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   CreateCustomerRequest,
   Customer,
@@ -34,10 +35,11 @@ export class CustomerService {
         data: response.data.data as Customer[],
         total: response.data.total || 0,
       };
-    } catch (error) {
-      throw new Error(
-        `Lỗi khi lấy danh sách customers: ${error instanceof Error ? error.message : "Unknown error"}`,
-      );
+    } catch (error: any) {
+      const errMessage =
+        error?.response?.data?.message || error?.message || "Unknown error";
+
+      throw new Error(errMessage);
     }
   }
 
@@ -50,10 +52,11 @@ export class CustomerService {
       return {
         data: response.data as Customer,
       };
-    } catch (error) {
-      throw new Error(
-        `Lỗi khi lấy chi tiết customer ${params.id}: ${error instanceof Error ? error.message : "Unknown error"}`,
-      );
+    } catch (error: any) {
+      const errMessage =
+        error?.response?.data?.message || error?.message || "Unknown error";
+
+      throw new Error(errMessage);
     }
   }
 
@@ -66,10 +69,11 @@ export class CustomerService {
       });
 
       return null;
-    } catch (error) {
-      throw new Error(
-        `Lỗi khi xóa customer ${params.ids}: ${error instanceof Error ? error.message : "Unknown error"}`,
-      );
+    } catch (error: any) {
+      const errMessage =
+        error?.response?.data?.message || error?.message || "Unknown error";
+
+      throw new Error(errMessage);
     }
   }
 
@@ -88,10 +92,11 @@ export class CustomerService {
       return {
         data: response.data as Customer,
       };
-    } catch (error) {
-      throw new Error(
-        `Lỗi khi cập nhật customer ${params.id}: ${error instanceof Error ? error.message : "Unknown error"}`,
-      );
+    } catch (error: any) {
+      const errMessage =
+        error?.response?.data?.message || error?.message || "Unknown error";
+
+      throw new Error(errMessage);
     }
   }
 
@@ -104,10 +109,11 @@ export class CustomerService {
       });
 
       return response.data as Customer;
-    } catch (error) {
-      throw new Error(
-        `Lỗi khi tạo customer: ${error instanceof Error ? error.message : "Unknown error"}`,
-      );
+    } catch (error: any) {
+      const errMessage =
+        error?.response?.data?.message || error?.message || "Unknown error";
+
+      throw new Error(errMessage);
     }
   }
 }
