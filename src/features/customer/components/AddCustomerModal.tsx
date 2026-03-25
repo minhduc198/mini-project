@@ -1,77 +1,19 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { X, UserPlus, Loader2 } from "lucide-react";
+import { Loader2, UserPlus, X } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
-import {
-  AddCustomerFormValues,
-  addCustomerSchema,
-} from "../features/customer/schemas";
-import { CreateCustomerRequest } from "../features/customer/types";
+import { AddCustomerFormValues, addCustomerSchema } from "../schemas/schemas";
+import { CreateCustomerRequest } from "../types/types";
+import { Input } from "@/src/components/ui/input";
+import { FIELDS } from "../constants";
 
 interface AddCustomerModalProps {
   open: boolean;
   onClose: () => void;
   handleCreateCustomer: (data: CreateCustomerRequest) => void;
 }
-
-const FIELDS: {
-  name: keyof AddCustomerFormValues;
-  label: string;
-  placeholder: string;
-  type?: string;
-  half?: boolean;
-}[] = [
-  {
-    name: "first_name",
-    label: "First Name",
-    placeholder: "Minh",
-    half: true,
-  },
-  {
-    name: "last_name",
-    label: "Last Name",
-    placeholder: "Duc",
-    half: true,
-  },
-  {
-    name: "email",
-    label: "Email",
-    placeholder: "minhduc@gmail.com",
-    type: "email",
-  },
-  {
-    name: "address",
-    label: "Address",
-    placeholder: "Ha Noi",
-  },
-  {
-    name: "city",
-    label: "City",
-    placeholder: "Ha Noi",
-    half: true,
-  },
-  {
-    name: "zipcode",
-    label: "Zip Code",
-    placeholder: "10000",
-    half: true,
-  },
-  {
-    name: "birthday",
-    label: "Birthday",
-    placeholder: "",
-    type: "date",
-    half: true,
-  },
-  {
-    name: "avatar",
-    label: "Avatar URL",
-    placeholder: "https://…",
-    half: true,
-  },
-];
 
 export function AddCustomerModal({
   open,
@@ -109,6 +51,7 @@ export function AddCustomerModal({
       if (e.key === "Escape") handleClose();
     };
     if (open) window.addEventListener("keydown", handler);
+
     return () => window.removeEventListener("keydown", handler);
   }, [open]);
 
@@ -125,7 +68,7 @@ export function AddCustomerModal({
     <div
       ref={overlayRef}
       onClick={(e) => e.target === overlayRef.current && handleClose()}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
+      className="fixed inset-0 z-200 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
     >
       <div className="relative w-full max-w-lg rounded-2xl border border-white/[0.08] bg-[#0F0F1C] shadow-2xl shadow-black/60 flex flex-col max-h-[90vh]">
         <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-white/[0.07] shrink-0">
@@ -164,7 +107,7 @@ export function AddCustomerModal({
                   <label className="block text-[11px] font-medium text-white/40 mb-1.5 uppercase tracking-wider">
                     {field.label}
                   </label>
-                  <input
+                  <Input
                     {...register(field.name)}
                     type={field.type ?? "text"}
                     placeholder={field.placeholder}

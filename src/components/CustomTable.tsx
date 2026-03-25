@@ -1,3 +1,4 @@
+import { ColumnHeader } from "../types";
 import {
   Table,
   TableBody,
@@ -5,8 +6,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { ColumnHeader } from "../types";
+} from "./ui/table";
 
 interface Props<T> {
   columnHeader: ColumnHeader<T>[];

@@ -1,4 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+import { SORT } from "@/src/types";
+import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from "@/src/constants";
+import http from "@/lib/http";
 import {
   CreateCustomerRequest,
   Customer,
@@ -9,10 +13,7 @@ import {
   GetCustomersListRequest,
   UpdateCustomerRequest,
   UpdateCustomerResponse,
-} from "./types";
-import { SORT } from "@/src/types";
-import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from "@/src/constants";
-import http from "@/lib/http";
+} from "../types/types";
 
 export class CustomerService {
   static async getCustomerList(
