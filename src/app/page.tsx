@@ -1,29 +1,33 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { Progress } from "@/components/ui/progress";
+import { Progress } from "@/src/components/ui/progress";
 import { formatShortNumber } from "@/lib/utils";
 import ColumnChart from "@/src/components/charts/ColumnChart";
 import CustomTable from "@/src/components/CustomTable";
 import KpiCard from "@/src/components/KpiCard";
 import { DEFAULT_PAGE } from "@/src/constants";
-import { fetchCustomersList } from "@/src/features/customer/services";
+import { fetchCustomersList } from "@/src/features/customer/api/services";
 import { fetchOrdersList } from "@/src/features/order/services";
 import { GetOrdersListResponse, Order } from "@/src/features/order/types";
 import { ColumnHeader } from "@/src/types";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowUpRight, ChevronRight } from "lucide-react";
 import { useMemo, useState } from "react";
+import Image from "next/image";
 
 const columnHeader: ColumnHeader<Order>[] = [
   {
     id: "customer_id",
     label: "Avatar",
     cellRender: (row) => (
-      <img
-        src={row.customer?.avatar}
+      <Image
+        width={32}
+        height={32}
+        sizes="32px"
+        src={row.customer?.avatar ?? ""}
         alt="avatar"
-        className="w-8 h-8 rounded-full"
+        className="rounded-full"
       />
     ),
   },
@@ -71,14 +75,6 @@ const columnHeader: ColumnHeader<Order>[] = [
 
 export default function Dashboard() {
   const [activeRange, setActiveRange] = useState("3M");
-  // const [customerListRq, setCustomerListRq] = useState<GetCustomersListRequest>(
-  //   {
-  //     pagination: {
-  //       page: DEFAULT_PAGE,
-  //       perPage: DEFAULT_PER_PAGE,
-  //     },
-  //   },
-  // );
 
   const { data: customerListData } = useQuery({
     queryKey: ["customer_list"],
@@ -200,7 +196,7 @@ export default function Dashboard() {
             </div>
             <CustomTable
               columnHeader={columnHeader}
-              columnData={orderList.slice(0, 11)}
+              columnData={orderList.filter((i) => i.customer_id).slice(0, 11)}
             />
           </div>
         </div>

@@ -1,6 +1,11 @@
 import { ApiResponse, ApiResponseList, SORT, UrlQuery } from "@/src/types";
 
-export type Group = "regular" | "ordered_once" | "collector" | "reviewer";
+export type Group =
+  | "regular"
+  | "ordered_once"
+  | "collector"
+  | "reviewer"
+  | "compulsive";
 
 export type Customer = {
   id: number;

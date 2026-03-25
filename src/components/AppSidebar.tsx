@@ -1,5 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
+
+import { useSidebarControl } from "@/src/hooks/use-sidebar-control";
+import { cn } from "@/lib/utils";
+import { Box, House, Package, Users, Zap } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Sidebar,
   SidebarContent,
@@ -7,11 +12,7 @@ import {
   SidebarGroup,
   SidebarHeader,
   useSidebar,
-} from "@/components/ui/sidebar";
-import { useSidebarControl } from "@/src/hooks/use-sidebar-control";
-import { cn } from "@/lib/utils";
-import { Box, House, Package, Users, Zap } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
+} from "./ui/sidebar";
 
 const sidebarItems = [
   { key: "dashboard", label: "Dashboard", url: "/", icon: <House size={16} /> },

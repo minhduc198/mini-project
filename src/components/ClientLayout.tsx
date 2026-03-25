@@ -1,10 +1,10 @@
 "use client";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { useSidebarControl } from "@/src/hooks/use-sidebar-control";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import { AppSidebar } from "./AppSidebar";
 import Header from "./Header";
+import { SidebarInset, SidebarProvider } from "./ui/sidebar";
 
 export const queryClient = new QueryClient({
   defaultOptions: {

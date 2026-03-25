@@ -6,7 +6,7 @@ import {
   TableColumns,
   UrlQuery,
 } from "@/src/types";
-import { Customer } from "../customer/types";
+import { Customer } from "../customer/types/types";
 
 export type OrderStatus = "ordered" | "delivered" | "cancelled";
 
@@ -71,7 +71,6 @@ export interface ExportOrdersRequest {
   format?: "xlsx" | "csv";
 }
 
-// Response Types
 export type GetOrdersListResponse = ApiResponseList<Order>;
 
 export type GetOrderDetailResponse = ApiResponse<Order>;

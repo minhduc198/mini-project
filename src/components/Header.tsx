@@ -1,16 +1,7 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { useSidebar } from "@/components/ui/sidebar";
+
 import { useSidebarControl } from "@/src/hooks/use-sidebar-control";
 import { cn } from "@/lib/utils";
 import {
@@ -27,6 +18,16 @@ import {
   Zap,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useSidebar } from "./ui/sidebar";
+import { Input } from "./ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export default function Header() {
   const { isPinned, isHovering, setIsPinned } = useSidebarControl();
@@ -35,8 +36,12 @@ export default function Header() {
   const isExpanded = isPinned || isHovering;
   const inputRef = useRef<HTMLInputElement>(null);
   const { isMobile, openMobile, setOpenMobile } = useSidebar();
+  const [mounted, setMounted] = useState(false);
 
-  // ⌘K focus shortcut
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const isCommandK =
@@ -47,6 +52,7 @@ export default function Header() {
         inputRef.current?.focus();
       }
     };
+
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
@@ -64,7 +70,7 @@ export default function Header() {
       className={cn(
         "h-[64px] flex xl:flex-row flex-col items-start xl:items-center xl:ml-20  justify-between",
         "border-b border-white/6 fixed top-0 left-0 right-0",
-        "bg-[#0C0C18]/95 backdrop-blur-md z-[999] pointer-events-auto",
+        "bg-[#0C0C18]/95 backdrop-blur-md z-100 pointer-events-auto",
         "transition-[margin] duration-300 ease-in-out",
 
         {
@@ -92,7 +98,6 @@ export default function Header() {
           </button>
         )}
 
-        {/* Search bar — desktop only */}
         <div className="relative w-[380px] hidden xl:flex">
           <Search
             size={14}
@@ -113,7 +118,6 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Mobile logo */}
         <div className="flex items-center gap-2 xl:hidden">
           <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow shadow-violet-500/30">
             <Zap size={13} className="text-white" />
@@ -123,7 +127,6 @@ export default function Header() {
           </span>
         </div>
 
-        {/* Mobile overflow toggle */}
         <button
           className="flex xl:hidden h-9 w-9 rounded-lg border border-white/[0.08] bg-white/[0.04] items-center justify-center text-white/50 hover:text-white transition-colors"
           onClick={() => setOpenMenu(!openMenu)}
@@ -132,14 +135,12 @@ export default function Header() {
         </button>
       </div>
 
-      {/* ── Mobile divider ──────────────────────────────────────── */}
       <div
         className={cn("w-full h-px bg-white/[0.06] flex xl:hidden", {
           hidden: !openMenu,
         })}
       />
 
-      {/* ── Right section ───────────────────────────────────────── */}
       <div
         className={cn(
           "w-full hidden xl:flex items-center justify-between xl:justify-end",
@@ -147,14 +148,11 @@ export default function Header() {
           { flex: openMenu },
         )}
       >
-        {/* Action buttons */}
         <div className="flex items-center gap-2">
-          {/* Dark mode toggle */}
           <button className="w-9 h-9 rounded-lg border border-white/[0.08] bg-white/[0.04] flex items-center justify-center text-white/40 hover:text-white/70 hover:bg-white/[0.07] transition-all">
             <Moon size={15} />
           </button>
 
-          {/* Notifications */}
           <button className="relative w-9 h-9 rounded-lg border border-white/[0.08] bg-white/[0.04] flex items-center justify-center text-white/40 hover:text-white/70 hover:bg-white/[0.07] transition-all">
             <Bell size={15} />
             <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-violet-400">
@@ -163,73 +161,72 @@ export default function Header() {
           </button>
         </div>
 
-        {/* Separator */}
         <div className="hidden xl:block w-px h-6 bg-white/[0.06]" />
 
-        {/* Profile dropdown */}
-        <DropdownMenu open={isOpenProfile} onOpenChange={setIsOpenProfile}>
-          <DropdownMenuTrigger asChild>
-            <button className="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-white/[0.04] transition-colors outline-none focus:outline-none">
-              <Avatar className="h-8 w-8">
-                <AvatarImage src="" />
-                <AvatarFallback className="bg-gradient-to-br from-violet-500 to-indigo-600 text-white text-xs font-semibold">
-                  N
-                </AvatarFallback>
-              </Avatar>
-              <div className="hidden xl:block text-left">
-                <p className="text-xs font-medium text-white/80 leading-none">
-                  Minh Duc
+        {mounted && (
+          <DropdownMenu open={isOpenProfile} onOpenChange={setIsOpenProfile}>
+            <DropdownMenuTrigger asChild>
+              <button className="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-white/[0.04] transition-colors outline-none focus:outline-none">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src="" />
+                  <AvatarFallback className="bg-gradient-to-br from-violet-500 to-indigo-600 text-white text-xs font-semibold">
+                    N
+                  </AvatarFallback>
+                </Avatar>
+                <div className="hidden xl:block text-left">
+                  <p className="text-xs font-medium text-white/80 leading-none">
+                    Minh Duc
+                  </p>
+                  <p className="text-[10px] text-white/30 mt-0.5 leading-none">
+                    Admin
+                  </p>
+                </div>
+                {isOpenProfile ? (
+                  <ChevronUp size={13} className="text-white/30" />
+                ) : (
+                  <ChevronDown size={13} className="text-white/30" />
+                )}
+              </button>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent
+              align="end"
+              className="w-[240px] rounded-xl border border-white/[0.08] bg-[#141420] shadow-xl shadow-black/50 p-2"
+            >
+              <div className="px-3 py-2.5 mb-1">
+                <p className="text-sm font-medium text-white/80">
+                  Nguyen Minh Duc
                 </p>
-                <p className="text-[10px] text-white/30 mt-0.5 leading-none">
-                  Admin
+                <p className="text-xs text-white/30 mt-0.5">
+                  nguyenminhduc@gmail.com
                 </p>
               </div>
-              {isOpenProfile ? (
-                <ChevronUp size={13} className="text-white/30" />
-              ) : (
-                <ChevronDown size={13} className="text-white/30" />
-              )}
-            </button>
-          </DropdownMenuTrigger>
 
-          <DropdownMenuContent
-            align="end"
-            className="w-[240px] rounded-xl border border-white/[0.08] bg-[#141420] shadow-xl shadow-black/50 p-2"
-          >
-            {/* User info */}
-            <div className="px-3 py-2.5 mb-1">
-              <p className="text-sm font-medium text-white/80">
-                Nguyen Minh Duc
-              </p>
-              <p className="text-xs text-white/30 mt-0.5">
-                nguyenminhduc@gmail.com
-              </p>
-            </div>
+              <DropdownMenuSeparator className="bg-white/[0.06]" />
 
-            <DropdownMenuSeparator className="bg-white/[0.06]" />
+              {[
+                { icon: CircleUser, label: "Edit profile" },
+                { icon: Settings, label: "Account settings" },
+                { icon: Info, label: "Support" },
+              ].map(({ icon: Icon, label }) => (
+                <DropdownMenuItem
+                  key={label}
+                  className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer text-sm text-white/50 hover:text-white/80 focus:bg-white/[0.04] focus:text-white/80"
+                >
+                  <Icon size={15} className="shrink-0" />
+                  {label}
+                </DropdownMenuItem>
+              ))}
 
-            {[
-              { icon: CircleUser, label: "Edit profile" },
-              { icon: Settings, label: "Account settings" },
-              { icon: Info, label: "Support" },
-            ].map(({ icon: Icon, label }) => (
-              <DropdownMenuItem
-                key={label}
-                className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer text-sm text-white/50 hover:text-white/80 focus:bg-white/[0.04] focus:text-white/80"
-              >
-                <Icon size={15} className="shrink-0" />
-                {label}
+              <DropdownMenuSeparator className="bg-white/[0.06] my-1" />
+
+              <DropdownMenuItem className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer text-sm text-rose-400/70 hover:text-rose-400 focus:bg-rose-500/[0.06] focus:text-rose-400">
+                <Info size={15} className="shrink-0" />
+                Sign out
               </DropdownMenuItem>
-            ))}
-
-            <DropdownMenuSeparator className="bg-white/[0.06] my-1" />
-
-            <DropdownMenuItem className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer text-sm text-rose-400/70 hover:text-rose-400 focus:bg-rose-500/[0.06] focus:text-rose-400">
-              <Info size={15} className="shrink-0" />
-              Sign out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </div>
     </div>
   );
