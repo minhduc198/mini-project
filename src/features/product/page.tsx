@@ -2,35 +2,67 @@
 
 import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from "@/src/constants";
 import { InventoryGrid } from "@/src/features/inventory/components/InventoryGrid";
-import { AddProductModal } from "@/src/features/product/components/AddProductModal";
+import { InventoryModal } from "@/src/features/inventory/components/InventoryModal";
+import { ProductModal } from "@/src/features/product/components/ProductModal";
 import { ProductStats } from "@/src/features/product/components/ProductStats";
 import { ProductTable } from "@/src/features/product/components/ProductTable";
-import { GetProductListRequest } from "@/src/features/product/types/types";
+import {
+  GetProductListRequest,
+  Product,
+} from "@/src/features/product/types/types";
 import { SORT } from "@/src/types";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { useInventories } from "../inventory/hook/useInventories";
 import { useProducts } from "./hook/useProducts";
+import { Inventory } from "../inventory/types/types";
+import { InventoryDeleteModal } from "../inventory/components/InventoryDeleteModal";
 
 export default function Products() {
-  const [showAddModal, setShowAddModal] = useState(false);
+  const [productModal, setProductModal] = useState<
+    | { open: false }
+    | { open: true; mode: "add" }
+    | { open: true; mode: "edit"; product: Product }
+  >({ open: false });
+
+  const [inventoryModal, setInventoryModal] = useState<
+    | { open: false }
+    | { open: true; mode: "add" }
+    | { open: true; mode: "edit"; inventory: Inventory }
+  >({ open: false });
+
+  const [deleteModal, setDeleteModal] = useState<{
+    open: boolean;
+    inventoryId: number[];
+  }>({
+    open: false,
+    inventoryId: [],
+  });
+
   const [activeCategoryId, setActiveCategoryId] = useState<string | undefined>(
     undefined,
   );
+
   const [productListRq, setProductListRq] = useState<GetProductListRequest>({
     filter: {},
     sort: { field: "reference", order: SORT.DESC },
     pagination: { page: DEFAULT_PAGE, perPage: DEFAULT_PER_PAGE },
   });
-
   const {
     statsQueryProduct,
     listQueryProduct,
     createProduct,
     isCreating,
     deleteProducts,
+    updateProduct,
   } = useProducts(productListRq);
-  const { inventoriesQuery } = useInventories();
+
+  const {
+    inventoriesQuery,
+    createInventory,
+    updateInventory,
+    deleteInventory,
+  } = useInventories();
 
   const allProducts = statsQueryProduct.data?.data ?? [];
   const pageProducts = listQueryProduct.data?.data ?? [];
@@ -46,6 +78,15 @@ export default function Products() {
     }));
   };
 
+  const closeModal = () => setProductModal({ open: false });
+
+  const closeInventoryModal = () => setInventoryModal({ open: false });
+
+  const handleConfirmDelete = () => {
+    deleteInventory.mutate(deleteModal.inventoryId);
+    setDeleteModal({ open: false, inventoryId: [] });
+  };
+
   return (
     <div className="min-h-screen bg-[#080810] text-white">
       <div className="p-6 space-y-5 mx-auto w-full min-w-0">
@@ -57,7 +98,7 @@ export default function Products() {
             </p>
           </div>
           <button
-            onClick={() => setShowAddModal(true)}
+            onClick={() => setProductModal({ open: true, mode: "add" })}
             className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-violet-500 hover:bg-violet-600 transition-colors text-xs font-medium shadow-lg shadow-violet-500/20"
           >
             <Plus size={13} />
@@ -71,13 +112,23 @@ export default function Products() {
           <p className="text-[11px] text-white/30 uppercase tracking-widest mb-3">
             Categories
           </p>
+
           <InventoryGrid
             inventories={inventories}
             products={allProducts}
             activeCategoryId={activeCategoryId}
             onSelect={handleSelectCategory}
-            onEdit={(inv) => console.log("Edit inventory:", inv)}
-            onDelete={(inv) => console.log("Delete inventory:", inv)}
+            onCreate={() => setInventoryModal({ open: true, mode: "add" })}
+            onEdit={(inv) =>
+              setInventoryModal({
+                open: true,
+                mode: "edit",
+                inventory: inv,
+              })
+            }
+            onDelete={(ids) => {
+              setDeleteModal({ open: true, inventoryId: ids });
+            }}
           />
         </div>
 
@@ -89,15 +140,61 @@ export default function Products() {
           request={productListRq}
           onRequestChange={setProductListRq}
           onDelete={deleteProducts}
+          onEdit={(product) =>
+            setProductModal({ open: true, mode: "edit", product })
+          }
         />
       </div>
 
-      <AddProductModal
-        open={showAddModal}
-        onClose={() => setShowAddModal(false)}
-        onSubmit={createProduct}
-        inventories={inventories}
-        isSubmitting={isCreating}
+      {productModal.open && productModal.mode === "add" && (
+        <ProductModal
+          mode="add"
+          open
+          onClose={closeModal}
+          onSubmit={createProduct}
+          inventories={inventories}
+          isSubmitting={isCreating}
+        />
+      )}
+
+      {productModal.open && productModal.mode === "edit" && (
+        <ProductModal
+          mode="edit"
+          open
+          onClose={closeModal}
+          onSubmit={(data) => updateProduct(data)}
+          inventories={inventories}
+          defaultValues={productModal.product}
+          productId={productModal.product.id}
+        />
+      )}
+
+      {inventoryModal.open && inventoryModal.mode === "add" && (
+        <InventoryModal
+          mode="add"
+          open
+          onClose={closeInventoryModal}
+          onSubmit={createInventory.mutate}
+          isSubmitting={createInventory.isPending}
+        />
+      )}
+
+      {inventoryModal.open && inventoryModal.mode === "edit" && (
+        <InventoryModal
+          mode="edit"
+          open
+          onClose={closeInventoryModal}
+          onSubmit={updateInventory.mutate}
+          defaultValues={inventoryModal.inventory}
+          inventoryId={inventoryModal.inventory.id}
+          isSubmitting={updateInventory.isPending}
+        />
+      )}
+
+      <InventoryDeleteModal
+        open={deleteModal.open}
+        onClose={() => setDeleteModal({ open: false, inventoryId: [] })}
+        onConfirm={handleConfirmDelete}
       />
     </div>
   );

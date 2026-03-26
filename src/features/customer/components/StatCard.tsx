@@ -12,7 +12,7 @@ export function StatCard({
   color: string;
 }) {
   return (
-    <div className="rounded-xl border border-white/[0.07] bg-[#0F0F1C] p-5 flex gap-4 items-start">
+    <div className="rounded-xl border border-white/[0.07] bg-overlay p-5 flex gap-4 items-start">
       <div
         className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${color}`}
       >

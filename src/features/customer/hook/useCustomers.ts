@@ -5,10 +5,15 @@ import {
   createCustomer,
   deleteCustomers,
   fetchCustomersList,
+  updateCustomer,
 } from "../api/services";
 import { queryClient } from "@/src/components/ClientLayout";
 import { toast } from "@/lib/toast";
-import { CreateCustomerRequest, GetCustomersListRequest } from "../types/types";
+import {
+  CreateCustomerRequest,
+  GetCustomersListRequest,
+  UpdateCustomerRequest,
+} from "../types/types";
 
 export function useCustomers(request: GetCustomersListRequest) {
   const statsQueryCustomer = useQuery({
@@ -51,11 +56,24 @@ export function useCustomers(request: GetCustomersListRequest) {
       },
     });
 
+  const { mutate: UpdateCustomerMutation } = useMutation({
+    mutationFn: (param: UpdateCustomerRequest) => updateCustomer(param),
+    onSuccess: () => {
+      toast.success("Customers updated");
+      queryClient.invalidateQueries({ queryKey: ["customer_list"] });
+      queryClient.invalidateQueries({ queryKey: ["customer_stats"] });
+    },
+    onError: (err: Error) => {
+      toast.error(err.message || "Failed to updated customers");
+    },
+  });
+
   return {
     statsQueryCustomer,
     listQueryCustomer,
     createCustomer: createCustomerMutation,
     deleteCustomers: deleteCustomersMutation,
+    updateCustomer: UpdateCustomerMutation,
     isCreating,
     isDeleting,
   };

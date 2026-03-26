@@ -6,10 +6,12 @@ import {
   createProduct,
   deleteProducts,
   fetchProductsList,
+  updateProduct,
 } from "@/src/features/product/api/services";
 import {
   CreateProductRequest,
   GetProductListRequest,
+  UpdateProductRequest,
 } from "@/src/features/product/types/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -51,11 +53,23 @@ export function useProducts(request: GetProductListRequest) {
     },
   });
 
+  const { mutate: updateProductMutation } = useMutation({
+    mutationFn: (param: UpdateProductRequest) => updateProduct(param),
+    onSuccess: () => {
+      toast.success("Products Edited");
+      queryClient.invalidateQueries({ queryKey: ["product_list"] });
+    },
+    onError: (err: Error) => {
+      toast.error(err.message || "Failed to edit product");
+    },
+  });
+
   return {
     statsQueryProduct,
     listQueryProduct,
     createProduct: createProductMutation,
     isCreating,
     deleteProducts: deleteProductsMutation,
+    updateProduct: updateProductMutation,
   };
 }

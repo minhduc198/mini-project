@@ -128,7 +128,7 @@ export default function Dashboard() {
         <KpiCard customerList={customerList} orderList={orderList} />
 
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
-          <div className="xl:col-span-2 rounded-xl border border-white/[0.07] bg-[#0F0F1C] p-5">
+          <div className="xl:col-span-2 rounded-xl border border-white/[0.07] bg-overlay p-5">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="text-sm font-semibold">Revenue</h3>
@@ -154,7 +154,7 @@ export default function Dashboard() {
           </div>
 
           <div className="flex flex-col gap-4">
-            <div className="rounded-xl border border-white/[0.07] bg-[#0F0F1C] p-5 flex-1">
+            <div className="rounded-xl border border-white/[0.07] bg-overlay p-5 flex-1">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-semibold">Top Reps</h3>
                 <ArrowUpRight size={14} className="text-white/20" />
@@ -187,7 +187,7 @@ export default function Dashboard() {
         </div>
 
         <div className="grid col-span-12">
-          <div className="xl:col-span-2 rounded-xl border border-white/[0.07] bg-[#0F0F1C] overflow-hidden">
+          <div className="xl:col-span-2 rounded-xl border border-white/[0.07] bg-overlay overflow-hidden">
             <div className="flex items-center justify-between px-5 py-4 border-b border-white/6">
               <h3 className="text-sm font-semibold">Active Orders</h3>
               <button className="text-xs text-violet-400 hover:text-violet-300 flex items-center gap-1 transition-colors">

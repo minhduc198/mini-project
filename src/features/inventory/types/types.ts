@@ -19,3 +19,7 @@ export type GetInventoryDetailRequest = {
 };
 
 export type GetInventoryDetailResponse = ApiResponse<Inventory>;
+
+export interface CreateInventoryRequest {
+  data: Partial<Omit<Inventory, "id">>;
+}

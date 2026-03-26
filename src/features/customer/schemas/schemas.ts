@@ -31,6 +31,10 @@ export const addCustomerSchema = z.object({
     .string()
     .min(1, "Birthday is required")
     .refine((val) => !isNaN(Date.parse(val)), "Invalid date"),
+
+  groups: z
+    .enum(["regular", "ordered_once", "collector", "reviewer", "compulsive"])
+    .optional(),
 });
 
 export type AddCustomerFormValues = z.infer<typeof addCustomerSchema>;
