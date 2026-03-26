@@ -33,7 +33,7 @@ export function InventoryCard({
         ${
           active
             ? "border-violet-500/40 bg-violet-500/8 shadow-lg shadow-violet-500/10"
-            : "border-white/[0.07] bg-[#0F0F1C] hover:border-white/15 hover:bg-white/[0.02]"
+            : "border-white/[0.07] bg-overlay hover:border-white/15 hover:bg-white/[0.02]"
         }`}
     >
       <div className="flex items-start justify-between mb-3">

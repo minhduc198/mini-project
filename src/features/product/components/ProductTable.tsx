@@ -6,6 +6,7 @@ import { Checkbox } from "@/src/components/CheckBox";
 import CustomTable from "@/src/components/CustomTable";
 import { Pagination } from "@/src/components/Pagination";
 import { SortBtn } from "@/src/components/SortBtn";
+import { Input } from "@/src/components/ui/input";
 import { DEFAULT_PAGE } from "@/src/constants";
 import { FilterPill } from "@/src/features/customer/components/FilterPill";
 import { Inventory } from "@/src/features/inventory/types/types";
@@ -14,10 +15,10 @@ import {
   Product,
 } from "@/src/features/product/types/types";
 import { ColumnHeader, SORT } from "@/src/types";
-import { Search, SlidersHorizontal, Trash2, X } from "lucide-react";
+import { Pencil, Search, SlidersHorizontal, Trash2, X } from "lucide-react";
 import { useMemo, useState } from "react";
 import { SortKey } from "../../customer/types/types";
-import { Input } from "@/src/components/ui/input";
+import { Button } from "@/src/components/ui/button";
 
 const SORT_OPTIONS = [
   { key: "reference", label: "Reference" },
@@ -36,6 +37,7 @@ interface ProductTableProps {
   request: GetProductListRequest;
   onRequestChange: (req: GetProductListRequest) => void;
   onDelete: (ids: number[]) => void;
+  onEdit: (product: Product) => void;
 }
 
 export function ProductTable({
@@ -46,6 +48,7 @@ export function ProductTable({
   request,
   onRequestChange,
   onDelete,
+  onEdit,
 }: ProductTableProps) {
   const [showSort, setShowSort] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
@@ -122,94 +125,110 @@ export function ProductTable({
     setShowDeleteConfirm(false);
   };
 
-  const columns: ColumnHeader<Product>[] = [
-    {
-      id: "id" as keyof Product,
-      label: "",
-      cellRender: (row) => (
-        <Checkbox
-          checked={selectedIds.has(row.id)}
-          onChange={() => toggleRow(row.id)}
-        />
-      ),
-    },
-    {
-      id: "thumbnail",
-      label: "",
-      cellRender: (row) => (
-        <div className="w-9 h-9 rounded-lg overflow-hidden ring-1 ring-white/10 bg-white/5 shrink-0 flex items-center justify-center">
-          {row.thumbnail ? (
-            <img
-              src={row.thumbnail}
-              alt={row.reference}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <span className="text-[10px] text-white/20">N/A</span>
-          )}
-        </div>
-      ),
-    },
-    {
-      id: "reference",
-      label: "Reference",
-      cellRender: (row) => (
-        <div>
-          <div className="font-medium text-white/80 leading-none mb-1 whitespace-nowrap text-xs">
-            {row.reference}
-          </div>
-          {row.description && (
-            <div className="text-[11px] text-white/25 truncate max-w-[200px]">
-              {row.description}
-            </div>
-          )}
-        </div>
-      ),
-    },
-    {
-      id: "inventory_id",
-      label: "Category",
-      cellRender: (row) => {
-        const inv = inventories.find((i) => i.id === row.inventory_id);
-        return (
-          <span className="px-2 py-0.5 rounded-md text-[11px] font-medium bg-sky-500/15 text-sky-300 border border-sky-500/20 whitespace-nowrap">
-            {inv?.name ?? `#${row.inventory_id}`}
-          </span>
-        );
+  const columns: ColumnHeader<Product>[] = useMemo(
+    () => [
+      {
+        id: "id" as keyof Product,
+        label: "",
+        cellRender: (row) => (
+          <Checkbox
+            checked={selectedIds.has(row.id)}
+            onChange={() => toggleRow(row.id)}
+          />
+        ),
       },
-    },
-    {
-      id: "price",
-      label: "Price",
-      cellRender: (row) => (
-        <span className="text-emerald-400 font-medium tabular-nums text-xs">
-          {formatShortNumber(row.price)}
-        </span>
-      ),
-    },
+      {
+        id: "thumbnail",
+        label: "",
+        cellRender: (row) => (
+          <div className="w-9 h-9 rounded-lg overflow-hidden ring-1 ring-white/10 bg-white/5 shrink-0 flex items-center justify-center">
+            {row.thumbnail ? (
+              <img
+                src={row.thumbnail}
+                alt={row.reference}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <span className="text-[10px] text-white/20">N/A</span>
+            )}
+          </div>
+        ),
+      },
+      {
+        id: "reference",
+        label: "Reference",
+        cellRender: (row) => (
+          <div>
+            <div className="font-medium text-white/80 leading-none mb-1 whitespace-nowrap text-xs">
+              {row.reference}
+            </div>
+            {row.description && (
+              <div className="text-[11px] text-white/25 truncate max-w-[200px]">
+                {row.description}
+              </div>
+            )}
+          </div>
+        ),
+      },
+      {
+        id: "inventory_id",
+        label: "Category",
+        cellRender: (row) => {
+          const inv = inventories.find((i) => i.id === row.inventory_id);
+          return (
+            <span className="px-2 py-0.5 rounded-md text-[11px] font-medium bg-sky-500/15 text-sky-300 border border-sky-500/20 whitespace-nowrap">
+              {inv?.name ?? `#${row.inventory_id}`}
+            </span>
+          );
+        },
+      },
+      {
+        id: "price",
+        label: "Price",
+        cellRender: (row) => (
+          <span className="text-emerald-400 font-medium tabular-nums text-xs">
+            {formatShortNumber(row.price)}
+          </span>
+        ),
+      },
+      {
+        id: "sales",
+        label: "Sales",
+        cellRender: (row) => (
+          <span className="font-mono text-white/50 text-xs tabular-nums">
+            {row.sales ?? 0}
+          </span>
+        ),
+      },
+      {
+        id: "width",
+        label: "W × H",
+        cellRender: (row) => (
+          <span className="text-white/30 text-[11px] whitespace-nowrap">
+            {row.width ?? "—"} × {row.height ?? "—"}
+          </span>
+        ),
+      },
 
-    {
-      id: "sales",
-      label: "Sales",
-      cellRender: (row) => (
-        <span className="font-mono text-white/50 text-xs tabular-nums">
-          {row.sales ?? 0}
-        </span>
-      ),
-    },
-    {
-      id: "width",
-      label: "W × H",
-      cellRender: (row) => (
-        <span className="text-white/30 text-[11px] whitespace-nowrap">
-          {row.width ?? "—"} × {row.height ?? "—"}
-        </span>
-      ),
-    },
-  ];
+      {
+        id: "edit" as keyof Product,
+        label: "",
+        cellRender: (row) => (
+          <Button
+            onClick={() => onEdit(row)}
+            className="w-7 h-7 rounded-md flex items-center justify-center text-white hover:text-sky-400 hover:bg-sky-500/10 transition-colors"
+            title="Edit product"
+          >
+            <Pencil size={13} />
+          </Button>
+        ),
+      },
+    ],
+    [selectedIds, inventories, onEdit],
+  );
 
   return (
-    <div className="rounded-xl border border-white/[0.07] bg-[#0F0F1C]">
+    <div className="rounded-xl border border-white/[0.07] bg-overlay">
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 px-5 py-4 border-b border-white/6">
         <div className="relative flex-1 max-w-xs">
           <Search
@@ -231,7 +250,6 @@ export function ProductTable({
             </button>
           )}
         </div>
-
         <div className="flex items-center gap-2 ml-auto">
           {hasActiveFilter && (
             <button
@@ -243,11 +261,7 @@ export function ProductTable({
           )}
           <button
             onClick={() => setShowSort(!showSort)}
-            className={`flex items-center gap-1.5 text-[11px] px-3 py-1.5 rounded-md border transition-colors ${
-              showSort
-                ? "border-violet-500/40 bg-violet-500/15 text-violet-300"
-                : "border-white/[0.07] text-white/30 hover:text-white/60 hover:border-white/20"
-            }`}
+            className={`flex items-center gap-1.5 text-[11px] px-3 py-1.5 rounded-md border transition-colors ${showSort ? "border-violet-500/40 bg-violet-500/15 text-violet-300" : "border-white/[0.07] text-white/30 hover:text-white/60 hover:border-white/20"}`}
           >
             <SlidersHorizontal size={12} /> Sort
           </button>
@@ -365,7 +379,7 @@ export function ProductTable({
         </div>
       )}
 
-      <div className="max-w-[1440px]">
+      <div className="max-w-[1440px] overflow-x-auto scrollbar-hide">
         {isLoading ? (
           <div className="py-20 text-center text-white/20 text-xs">
             Loading products…

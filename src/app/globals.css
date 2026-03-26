@@ -6,6 +6,7 @@
 
 
 @theme inline {
+  --color-overlay: var(--overlay);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -45,41 +46,31 @@
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
 
-  /* ── Custom CRM brand tokens ─────────────────────────── */
-  /* Primary violet */
   --crm-violet:        #8B5CF6;
   --crm-violet-dim:    #7C3AED;
   --crm-violet-glow:   rgba(139, 92, 246, 0.20);
-  /* Secondary */
   --crm-indigo:        #6366F1;
-  /* Info */
   --crm-cyan:          #06B6D4;
   --crm-cyan-glow:     rgba(6, 182, 212, 0.15);
-  /* Success */
   --crm-emerald:       #10B981;
   --crm-emerald-glow:  rgba(16, 185, 129, 0.15);
-  /* Danger / churn */
   --crm-rose:          #F43F5E;
   --crm-rose-glow:     rgba(244, 63, 94, 0.15);
-  /* Warning */
   --crm-amber:         #F59E0B;
-  /* Surfaces */
   --crm-bg:            #080810;
   --crm-surface:       #0C0C18;
   --crm-card:          #0F0F1C;
   --crm-border:        rgba(255,255,255,0.07);
 }
 
-/* ─── Dark-first theme (no .dark needed) ────────────────────────────────── */
 :root {
-  /* Brand: violet */
   --primary:            oklch(0.606 0.232 293);  
   --primary-foreground: oklch(0.985 0 0);
 
-  /* Backgrounds */
   --background:         oklch(0.082 0.018 275);  
   --foreground:         oklch(0.945 0 0);
 
+  --overlay: #0F0F1C;
   --card:               oklch(0.107 0.018 275);   
   --card-foreground:    oklch(0.945 0 0);
 

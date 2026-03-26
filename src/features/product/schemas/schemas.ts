@@ -7,9 +7,9 @@ export const productSchema = z.object({
     .max(100, "Max 100 characters"),
 
   inventory_id: z.number().min(1, "Category is required"),
-  price: z.number().min(0, "Price must be ≥ 0"),
-  width: z.number().min(0, "Width must be ≥ 0").optional(),
-  height: z.number().min(0, "Height must be ≥ 0").optional(),
+  price: z.number().min(0, "Price must be greater 0").optional(),
+  width: z.number().min(0, "Width must be greater 0").optional(),
+  height: z.number().min(0, "Height must be greater 0").optional(),
   thumbnail: z.string().url("Must be a valid URL").optional().or(z.literal("")),
   image: z.string().url("Must be a valid URL").optional().or(z.literal("")),
   description: z.string().max(500, "Max 500 characters").optional(),
