@@ -28,6 +28,7 @@ import Image from "next/image";
 import { useMemo, useState } from "react";
 import { GROUP_LABELS, GROUP_STYLE, LIST_SORT_BY } from "../constants";
 import { Button } from "@/src/components/ui/button";
+import { TextFieldInput } from "@/src/components/TextFieldInput";
 
 interface Props {
   customers: Customer[];
@@ -313,6 +314,7 @@ export function CustomerTable({
             size={13}
             className="absolute left-3 top-1/2 -translate-y-1/2 text-white/25"
           />
+
           <Input
             value={filter.q ?? ""}
             onChange={(e) => updateFilter({ q: e.target.value || undefined })}

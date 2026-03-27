@@ -304,66 +304,17 @@ export function OrderModal(props: Props) {
                       </div>
 
                       <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <label className="block text-[11px] font-medium text-white/40 mb-1.5 uppercase tracking-wider">
-                            Quantity
-                          </label>
-                          <Controller
-                            name={`basket.${index}.quantity`}
-                            control={control}
-                            render={({ field: f, fieldState }) => (
-                              <div>
-                                <Input
-                                  type="number"
-                                  min={1}
-                                  placeholder="1"
-                                  value={f.value ?? 1}
-                                  onChange={(e) =>
-                                    f.onChange(
-                                      e.target.value === ""
-                                        ? 1
-                                        : Number(e.target.value),
-                                    )
-                                  }
-                                  className={`w-full bg-white/[0.04] border rounded-lg px-3 py-2 text-xs text-white/80 placeholder-white/15
-                                    focus:outline-none focus:bg-white/[0.06] transition-colors
-                                    ${fieldState.error ? "border-red-500/40" : "border-white/[0.07] focus:border-violet-500/50"}`}
-                                />
-                                {fieldState.error && (
-                                  <p className="mt-1 text-[10px] text-red-400/80">
-                                    {fieldState.error.message}
-                                  </p>
-                                )}
-                              </div>
-                            )}
-                          />
-                        </div>
+                        <TextFieldNumber
+                          name={`basket.${index}.quantity`}
+                          label="Quantity"
+                          placeholder="1"
+                        />
 
-                        <div>
-                          <label className="block text-[11px] font-medium text-white/40 mb-1.5 uppercase tracking-wider">
-                            Price
-                          </label>
-                          <Controller
-                            name={`basket.${index}.price`}
-                            control={control}
-                            render={({ field: f }) => (
-                              <Input
-                                type="number"
-                                min={0}
-                                placeholder="0"
-                                value={f.value ?? 0}
-                                onChange={(e) =>
-                                  f.onChange(
-                                    e.target.value === ""
-                                      ? 0
-                                      : Number(e.target.value),
-                                  )
-                                }
-                                className="w-full bg-white/[0.04] border border-white/[0.07] rounded-lg px-3 py-2 text-xs text-white/80 placeholder-white/15 focus:outline-none focus:bg-white/[0.06] focus:border-violet-500/50 transition-colors"
-                              />
-                            )}
-                          />
-                        </div>
+                        <TextFieldNumber
+                          name={`basket.${index}.price`}
+                          label="Price"
+                          placeholder="0"
+                        />
                       </div>
                     </div>
                   ))}
@@ -371,7 +322,6 @@ export function OrderModal(props: Props) {
               </div>
             </div>
 
-            {/* ── Footer */}
             <div className="flex items-center justify-end gap-2.5 px-6 py-4 border-t border-white/[0.07] shrink-0">
               <button
                 type="button"

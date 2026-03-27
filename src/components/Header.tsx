@@ -28,6 +28,7 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { TextFieldInput } from "./TextFieldInput";
 
 export default function Header() {
   const { isPinned, isHovering, setIsPinned } = useSidebarControl();
@@ -100,6 +101,7 @@ export default function Header() {
             size={14}
             className="text-white/25 absolute top-1/2 -translate-y-1/2 left-3.5 pointer-events-none"
           />
+
           <Input
             ref={inputRef}
             placeholder="Search or type command..."

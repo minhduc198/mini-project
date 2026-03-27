@@ -1,5 +1,6 @@
 import { Controller, useFormContext } from "react-hook-form";
 import { Input } from "@/src/components/ui/input";
+import { get } from "react-hook-form";
 
 interface TextFieldNumberProps {
   name: string;
@@ -16,7 +17,8 @@ export function TextFieldNumber({
     control,
     formState: { errors },
   } = useFormContext();
-  const error = errors[name]?.message as string | undefined;
+
+  const error = get(errors, name)?.message;
 
   return (
     <div>
@@ -33,7 +35,7 @@ export function TextFieldNumber({
             value={field.value ?? ""}
             onChange={(e) =>
               field.onChange(
-                e.target.value === "" ? null : Number(e.target.value),
+                e.target.value === "" ? "" : Number(e.target.value),
               )
             }
             className={`w-full bg-white/[0.04] border rounded-lg px-3 py-2 text-xs text-white/80 placeholder-white/15
