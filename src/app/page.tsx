@@ -18,6 +18,8 @@ import { useMemo, useState } from "react";
 import { Button } from "../components/ui/button";
 import { fetchOrdersList } from "../features/order/api/services";
 import { STATUS_LABELS, STATUS_STYLE } from "../features/order/constants";
+import { customerKeys } from "../features/customer/query-key/customer.query-key";
+import { orderKeys } from "../features/order/query-key/order.query-key";
 
 const columnHeader: ColumnHeader<Order>[] = [
   {
@@ -74,7 +76,7 @@ export default function Dashboard() {
   const [activeRange, setActiveRange] = useState("3M");
 
   const { data: customerListData } = useQuery({
-    queryKey: ["customer_list"],
+    queryKey: customerKeys.all,
     queryFn: () =>
       fetchCustomersList({
         pagination: {
@@ -87,7 +89,7 @@ export default function Dashboard() {
   const customerList = customerListData?.data ?? [];
 
   const { data: orderListData } = useQuery<GetOrdersListResponse>({
-    queryKey: ["order_list"],
+    queryKey: orderKeys.all,
     queryFn: () =>
       fetchOrdersList({
         pagination: {

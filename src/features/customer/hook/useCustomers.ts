@@ -59,7 +59,7 @@ export function useCustomers(request: GetCustomersListRequest) {
     mutationFn: (param: UpdateCustomerRequest) => updateCustomer(param),
     onSuccess: () => {
       toast.success("Customers updated");
-      queryClient.invalidateQueries({ queryKey: customerKeys.all });
+      queryClient.invalidateQueries({ queryKey: customerKeys.list(request) });
     },
     onError: (err: Error) => {
       toast.error(err.message || "Failed to update customers");

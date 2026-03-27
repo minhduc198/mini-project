@@ -2,24 +2,23 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useSidebarControl } from "@/src/hooks/use-sidebar-control";
 import { cn } from "@/lib/utils";
+import { useSidebarControl } from "@/src/hooks/use-sidebar-control";
 import {
-  Bell,
   ChevronDown,
   ChevronUp,
   CircleUser,
   Ellipsis,
+  Headset,
   Info,
-  Moon,
+  LogOut,
   Search,
   Settings,
   X,
   Zap,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { useSidebar } from "./ui/sidebar";
-import { Input } from "./ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,8 +26,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { TextFieldInput } from "./TextFieldInput";
+import { Input } from "./ui/input";
+import { useSidebar } from "./ui/sidebar";
 
 export default function Header() {
   const { isPinned, isHovering, setIsPinned } = useSidebarControl();
@@ -191,7 +190,7 @@ export default function Header() {
               {[
                 { icon: CircleUser, label: "Edit profile" },
                 { icon: Settings, label: "Account settings" },
-                { icon: Info, label: "Support" },
+                { icon: Headset, label: "Support" },
               ].map(({ icon: Icon, label }) => (
                 <DropdownMenuItem
                   key={label}
@@ -205,7 +204,7 @@ export default function Header() {
               <DropdownMenuSeparator className="bg-white/[0.06] my-1" />
 
               <DropdownMenuItem className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer text-sm text-rose-400/70 hover:text-rose-400 focus:bg-rose-500/[0.06] focus:text-rose-400">
-                <Info size={15} className="shrink-0" />
+                <LogOut size={15} className="shrink-0" />
                 Sign out
               </DropdownMenuItem>
             </DropdownMenuContent>

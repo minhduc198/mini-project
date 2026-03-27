@@ -26,7 +26,7 @@ import { Loader2, Pencil, UserPlus } from "lucide-react";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
-import { DatePicker } from "@/src/components/DatePickerField";
+import { DatePickerField } from "@/src/components/DatePickerField";
 import { SelectField } from "@/src/components/SelectField";
 import { GROUP_LABELS } from "../constants";
 
@@ -70,9 +70,11 @@ export function CustomerModal(props: Props) {
     resolver: zodResolver(addCustomerSchema),
   });
 
-  const { handleSubmit, reset, watch } = methods;
-
-  const birthday = watch("birthday");
+  const {
+    handleSubmit,
+    reset,
+    formState: { isDirty },
+  } = methods;
 
   useEffect(() => {
     if (!open) return;
@@ -200,15 +202,10 @@ export function CustomerModal(props: Props) {
                 </div>
 
                 <div className="col-span-2">
-                  <label className="block text-[11px] font-medium text-white/40 mb-1.5 uppercase tracking-wider">
-                    Birthday
-                  </label>
-
-                  <DatePicker
-                    value={birthday}
-                    onChange={(iso) => reset({ birthday: iso })}
+                  <DatePickerField
+                    name="birthday"
                     placeholder="Birthday"
-                    className="w-full"
+                    label="Birthday"
                   />
                 </div>
               </div>
@@ -225,7 +222,7 @@ export function CustomerModal(props: Props) {
 
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={!isDirty || isSubmitting}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-500 hover:bg-violet-600 disabled:opacity-50 text-xs font-medium shadow-lg shadow-violet-500/20"
               >
                 {isSubmitting ? (

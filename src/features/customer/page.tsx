@@ -153,7 +153,7 @@ export default function Customers() {
           mode="edit"
           open
           onClose={closeModal}
-          onSubmit={(data) => updateCustomer?.(data)}
+          onSubmit={updateCustomer}
           defaultValues={customerModal.customer}
           customerId={customerModal.customer.id}
         />
