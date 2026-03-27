@@ -133,7 +133,7 @@ export function SearchableSelect({
                       onChange?.(opt.value);
                       setOpen(false);
                     }}
-                    className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs transition-colors text-left
+                    className={`w-full bg-transparent flex items-center gap-2.5 px-3 py-2 text-xs transition-colors text-left
                       ${isActive ? "bg-violet-500/10 text-violet-300" : "text-white/60 hover:bg-white/[0.04] hover:text-white/80"}`}
                   >
                     {opt.avatar && (
