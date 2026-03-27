@@ -1,4 +1,4 @@
-import { BASE_URL } from "@/src/constants";
+import { env } from "@/src/config/env";
 import axios, { AxiosInstance } from "axios";
 
 class Http {
@@ -6,7 +6,7 @@ class Http {
 
   constructor() {
     this.instance = axios.create({
-      baseURL: BASE_URL,
+      baseURL: env.BASE_URL,
     });
 
     // this.instance.interceptors.request.use(

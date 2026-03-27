@@ -4,6 +4,7 @@ import { Check, ChevronDown, Search } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 
 export interface SearchableOption {
   value: number | string;
@@ -106,7 +107,7 @@ export function SearchableSelect({
                 size={12}
                 className="absolute left-2.5 top-1/2 -translate-y-1/2 text-white/20"
               />
-              <input
+              <Input
                 ref={inputRef}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}

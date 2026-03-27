@@ -29,6 +29,7 @@ import {
 import { Loader2, Pencil, Plus, ShoppingCart, Trash2 } from "lucide-react";
 import { useEffect } from "react";
 import { Button } from "@/src/components/ui/button";
+import { Input } from "@/src/components/ui/input";
 
 type AddMode = {
   mode: "add";
@@ -312,7 +313,7 @@ export function OrderModal(props: Props) {
                             control={control}
                             render={({ field: f, fieldState }) => (
                               <div>
-                                <input
+                                <Input
                                   type="number"
                                   min={1}
                                   placeholder="1"
@@ -346,7 +347,7 @@ export function OrderModal(props: Props) {
                             name={`basket.${index}.price`}
                             control={control}
                             render={({ field: f }) => (
-                              <input
+                              <Input
                                 type="number"
                                 min={0}
                                 placeholder="0"
