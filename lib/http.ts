@@ -6,7 +6,8 @@ class Http {
 
   constructor() {
     this.instance = axios.create({
-      baseURL: env.BASE_URL,
+      baseURL:
+        typeof window !== "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "",
     });
 
     // this.instance.interceptors.request.use(
