@@ -12,7 +12,7 @@ import {
   CreateInventoryRequest,
   Inventory,
   UpdateInventoryRequest,
-} from "@/src/features/inventory/types/types";
+} from "@/src/features/inventory/types";
 import { inventorySchema, InventoryFormValues } from "../schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Layers, Loader2, Pencil, Plus } from "lucide-react";

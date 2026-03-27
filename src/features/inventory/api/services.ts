@@ -7,7 +7,7 @@ import {
   GetInventoryDetailResponse,
   Inventory,
   UpdateInventoryRequest,
-} from "../types/types";
+} from "../types";
 
 export class InventoriesService {
   static async getInventoriesList(): Promise<GetInventoriesListResponse> {

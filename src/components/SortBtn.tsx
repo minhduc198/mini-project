@@ -1,5 +1,5 @@
 import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
-import { SortKey } from "../features/customer/types/types";
+import { SortKey } from "../features/customer/types";
 
 export function SortBtn<T>({
   label,

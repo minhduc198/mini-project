@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from "@/src/constants";
 import { SORT } from "@/src/types";
+
+import http from "@/lib/http";
 import {
   CreateOrderRequest,
   CreateOrderResponse,
@@ -10,8 +13,7 @@ import {
   Order,
   UpdateOrderRequest,
   UpdateOrderResponse,
-} from "./types";
-import http from "@/lib/http";
+} from "../types";
 
 export class OrdersService {
   static async getOrdersList(
@@ -110,38 +112,19 @@ export class OrdersService {
     }
   }
 
-  static async getOrdersStats(filter: GetOrdersListRequest["filter"] = {}) {
+  static async updateOrderDirect(params: UpdateOrderRequest) {
     try {
-      const response = await OrdersService.getOrdersList({
-        pagination: { page: 1, perPage: 1000 },
-        filter,
+      const response = await http.put("orders", {
+        id: params.id,
+        data: params.data,
       });
-
-      const orders = response.data;
-      const totalOrders = orders.length;
-      const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
-      const averageOrderValue =
-        totalOrders > 0 ? totalRevenue / totalOrders : 0;
-
-      const statusCounts = orders.reduce(
-        (acc, order) => {
-          acc[order.status] = (acc[order.status] || 0) + 1;
-          return acc;
-        },
-        {} as Record<string, number>,
-      );
-
-      return {
-        totalOrders,
-        totalRevenue,
-        averageOrderValue,
-        statusCounts,
-        returnedOrders: orders.filter((order) => order.returned).length,
-      };
-    } catch (error) {
-      throw new Error(
-        `Lỗi khi lấy thống kê orders: ${error instanceof Error ? error.message : "Unknown error"}`,
-      );
+      return response.data;
+    } catch (error: any) {
+      const errMessage =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Failed to update order";
+      throw new Error(errMessage);
     }
   }
 }
@@ -157,8 +140,8 @@ export const updateOrder = (params: UpdateOrderRequest) =>
 
 export const deleteOrders = (ids: number[]) => OrdersService.deleteMany(ids);
 
-export const fetchOrdersStats = (filter?: GetOrdersListRequest["filter"]) =>
-  OrdersService.getOrdersStats(filter);
-
 export const createOrder = (payload: CreateOrderRequest) =>
   OrdersService.createOrder(payload);
+
+export const updateOrderDirect = (payload: UpdateOrderRequest) =>
+  OrdersService.updateOrderDirect(payload);

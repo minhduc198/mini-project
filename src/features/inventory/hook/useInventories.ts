@@ -9,11 +9,12 @@ import {
 } from "@/src/features/inventory/api/services";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { CreateInventoryRequest, UpdateInventoryRequest } from "../types/types";
+import { CreateInventoryRequest, UpdateInventoryRequest } from "../types";
+import { inventoryKeys } from "../query-key/inventory.query-key";
 
 export function useInventories() {
-  const getInventories = useQuery({
-    queryKey: ["inventories"],
+  const inventoriesQuery = useQuery({
+    queryKey: inventoryKeys.all,
     queryFn: fetchInventoriesList,
     refetchOnWindowFocus: false,
   });
@@ -22,7 +23,7 @@ export function useInventories() {
     mutationFn: (ids: number[]) => deleteInventory(ids),
     onSuccess: () => {
       toast.success("Inventory deleted successfully");
-      queryClient.invalidateQueries({ queryKey: ["inventories"] });
+      queryClient.invalidateQueries({ queryKey: inventoryKeys.all });
     },
     onError: () => {
       toast.error("Inventory deleted unsuccessful");
@@ -32,8 +33,8 @@ export function useInventories() {
   const updateInventoryMutation = useMutation({
     mutationFn: (params: UpdateInventoryRequest) => updateInventory(params),
     onSuccess: () => {
-      toast.success("Inventory deleted successfully");
-      queryClient.invalidateQueries({ queryKey: ["inventories"] });
+      toast.success("Inventory updated successfully");
+      queryClient.invalidateQueries({ queryKey: inventoryKeys.all });
     },
     onError: () => {
       toast.error("Updated inventory unsuccessful");
@@ -44,7 +45,7 @@ export function useInventories() {
     mutationFn: (params: CreateInventoryRequest) => createInventory(params),
     onSuccess: () => {
       toast.success("Inventory created successfully");
-      queryClient.invalidateQueries({ queryKey: ["inventories"] });
+      queryClient.invalidateQueries({ queryKey: inventoryKeys.all });
     },
     onError: () => {
       toast.error("Create inventory unsuccessful");
@@ -52,7 +53,7 @@ export function useInventories() {
   });
 
   return {
-    inventoriesQuery: getInventories,
+    inventoriesQuery,
     deleteInventory: deleteInventoryMutation,
     updateInventory: updateInventoryMutation,
     createInventory: createInventoryMutation,

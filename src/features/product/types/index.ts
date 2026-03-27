@@ -1,10 +1,4 @@
-import {
-  ApiResponse,
-  ApiResponseList,
-  SORT,
-  TableColumns,
-  UrlQuery,
-} from "@/src/types";
+import { ApiResponse, ApiResponseList, SORT } from "@/src/types";
 
 export type Product = {
   id: number;
@@ -20,31 +14,7 @@ export type Product = {
   quantity?: number;
 };
 
-export interface ProductSort {
-  field:
-    | "id"
-    | "reference"
-    | "inventory_id"
-    | "price"
-    | "sales"
-    | "created_at"
-    | "updated_at";
-  order: "ASC" | "DESC";
-}
-
 export type ProductListResponse = ApiResponseList<Product>;
-
-export interface ProductParam {
-  id: number[];
-  reference?: string;
-  q: string;
-  sales_gt: string;
-  sales_lte: string;
-  sales: string;
-  inventory_id: string;
-}
-
-export type ProductUrlQuery = UrlQuery<ProductParam>;
 
 export interface GetProductListRequest {
   pagination: {
@@ -85,5 +55,3 @@ export type UpdateProductResponse = ApiResponse<Product>;
 export interface CreateProductRequest {
   data: Partial<Omit<Product, "id">>;
 }
-
-export type TableColumnsProduct = TableColumns<Product>[];

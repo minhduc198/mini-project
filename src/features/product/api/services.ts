@@ -13,7 +13,7 @@ import {
   Product,
   UpdateProductRequest,
   UpdateProductResponse,
-} from "../types/types";
+} from "../types";
 
 export class ProductService {
   static async getProductList(

@@ -9,7 +9,7 @@ import {
 } from "@/src/components/ui/dialog";
 import { Loader2, Trash2 } from "lucide-react";
 
-interface ConfirmDeleteModalProps {
+interface Props {
   open: boolean;
   onClose: () => void;
   onConfirm: () => void;
@@ -25,7 +25,7 @@ export function InventoryDeleteModal({
   title = "Delete item",
   description = "This action cannot be undone.",
   isLoading = false,
-}: ConfirmDeleteModalProps) {
+}: Props) {
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
       <DialogContent

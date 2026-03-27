@@ -1,18 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  ApiResponse,
-  ApiResponseList,
-  SORT,
-  TableColumns,
-  UrlQuery,
-} from "@/src/types";
-import { Customer } from "../customer/types/types";
+import { ApiResponse, ApiResponseList, SORT } from "@/src/types";
+import { Customer } from "../../customer/types";
 
 export type OrderStatus = "ordered" | "delivered" | "cancelled";
 
 export type BasketItem = {
   product_id: number;
   quantity: number;
+  price: number;
 };
 
 export type Order = {
@@ -62,15 +57,6 @@ export interface UpdateOrderRequest {
   data: Partial<Omit<Order, "id">>;
 }
 
-export interface DeleteOrderRequest {
-  id: number;
-}
-
-export interface ExportOrdersRequest {
-  filter?: GetOrdersListRequest["filter"];
-  format?: "xlsx" | "csv";
-}
-
 export type GetOrdersListResponse = ApiResponseList<Order>;
 
 export type GetOrderDetailResponse = ApiResponse<Order>;
@@ -78,44 +64,6 @@ export type GetOrderDetailResponse = ApiResponse<Order>;
 export type UpdateOrderResponse = ApiResponse<Order>;
 
 export type DeleteOrderResponse = ApiResponse<Order>;
-
-export interface ExportOrdersResponse {
-  url: string;
-  filename: string;
-}
-
-export interface OrderError {
-  message: string;
-  code?: string;
-  details?: any;
-}
-
-export interface OrderParams {
-  status: OrderStatus;
-  customer_id: number;
-  date_gte: string;
-  date_lte: string;
-  total_gte: number;
-  returned: string;
-  q: string;
-  id?: string;
-}
-
-export type OrderUrlQuery = UrlQuery<OrderParams>;
-
-export type OrderSettingColumn = {
-  ordered: TableColumns<Order>[];
-  delivered: TableColumns<Order>[];
-  cancelled: TableColumns<Order>[];
-};
-
-export interface OrderDetailProduct {
-  id: number;
-  reference: string;
-  price: number;
-  quantity: number;
-  total: number;
-}
 
 export type CreateOrderRequest = {
   customer_id: number;
@@ -125,7 +73,7 @@ export type CreateOrderRequest = {
   basket: {
     product_id: number;
     quantity: number;
-    price?: number;
+    price: number;
   }[];
 };
 

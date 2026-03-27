@@ -6,16 +6,13 @@ import { InventoryModal } from "@/src/features/inventory/components/InventoryMod
 import { ProductModal } from "@/src/features/product/components/ProductModal";
 import { ProductStats } from "@/src/features/product/components/ProductStats";
 import { ProductTable } from "@/src/features/product/components/ProductTable";
-import {
-  GetProductListRequest,
-  Product,
-} from "@/src/features/product/types/types";
+import { GetProductListRequest, Product } from "@/src/features/product/types";
 import { SORT } from "@/src/types";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { useInventories } from "../inventory/hook/useInventories";
 import { useProducts } from "./hook/useProducts";
-import { Inventory } from "../inventory/types/types";
+import { Inventory } from "../inventory/types";
 import { InventoryDeleteModal } from "../inventory/components/InventoryDeleteModal";
 
 export default function Products() {

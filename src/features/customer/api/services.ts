@@ -13,7 +13,7 @@ import {
   GetCustomersListRequest,
   UpdateCustomerRequest,
   UpdateCustomerResponse,
-} from "../types/types";
+} from "../types";
 
 export class CustomerService {
   static async getCustomerList(

@@ -79,13 +79,10 @@ export default function Header() {
         },
       )}
     >
-      <div className="w-full flex items-center justify-between xl:justify-start gap-3 px-4 h-[64px]">
+      <div className="w-full flex items-center justify-between xl:justify-start gap-3 px-4 h-16 ">
         {isMobile && openMobile ? (
-          <button
-            onClick={() => setOpenMobile(false)}
-            className="h-9 w-9 rounded-lg border border-white/[0.08] bg-white/[0.04] flex items-center justify-center text-white/50 hover:text-white transition-colors"
-          >
-            <X size={16} />
+          <button>
+            <X size={24} className="ml-2" />
           </button>
         ) : (
           <button
@@ -98,7 +95,7 @@ export default function Header() {
           </button>
         )}
 
-        <div className="relative w-[380px] hidden xl:flex">
+        <div className="relative w-95 hidden xl:flex">
           <Search
             size={14}
             className="text-white/25 absolute top-1/2 -translate-y-1/2 left-3.5 pointer-events-none"

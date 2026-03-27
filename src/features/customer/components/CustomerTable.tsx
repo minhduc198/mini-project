@@ -13,7 +13,7 @@ import {
   GetCustomersListRequest,
   Group,
   SortKey,
-} from "@/src/features/customer/types/types";
+} from "@/src/features/customer/types";
 import { ColumnHeader, SORT } from "@/src/types";
 import {
   Mail,
@@ -29,7 +29,7 @@ import { useMemo, useState } from "react";
 import { GROUP_LABELS, GROUP_STYLE, LIST_SORT_BY } from "../constants";
 import { Button } from "@/src/components/ui/button";
 
-interface CustomerTableProps {
+interface Props {
   customers: Customer[];
   total: number;
   isLoading: boolean;
@@ -47,7 +47,7 @@ export function CustomerTable({
   onRequestChange,
   onDelete,
   onEdit,
-}: CustomerTableProps) {
+}: Props) {
   const [showSort, setShowSort] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -295,7 +295,7 @@ export function CustomerTable({
           <Button
             onClick={() => onEdit(row)}
             className="w-7 h-7 rounded-md flex items-center justify-center text-white hover:text-sky-400 hover:bg-sky-500/10 transition-colors"
-            title="Edit product"
+            title="Edit order"
           >
             <Pencil size={13} />
           </Button>
