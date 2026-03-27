@@ -267,7 +267,7 @@ export function OrderTable({
   return (
     <div className="rounded-xl border border-white/[0.07] bg-[#0F0F1C]">
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 px-5 py-4 border-b border-white/6">
-        <div className="relative flex-1 max-w-xs">
+        <div className="relative flex-1 max-w-full xl:max-w-xs ">
           <Search
             size={13}
             className="absolute left-3 top-1/2 -translate-y-1/2 text-white/25"
@@ -287,7 +287,7 @@ export function OrderTable({
             </button>
           )}
         </div>
-        <div className="flex items-center gap-2 ml-auto">
+        <div className="flex items-center gap-2 mr-auto xl:ml-auto xl:mr-0">
           {hasActiveFilter && (
             <Button
               onClick={resetFilters}
@@ -296,16 +296,16 @@ export function OrderTable({
               <X size={11} /> Reset
             </Button>
           )}
-          <button
+          <Button
             onClick={() => setShowSort(!showSort)}
-            className={`flex items-center gap-1.5 text-[11px] px-3 py-1.5 rounded-md border transition-colors ${
+            className={`flex items-center  bg-transparent gap-1.5 text-[11px] px-3 py-1.5 rounded-md border transition-colors ${
               showSort
                 ? "border-violet-500/40 bg-violet-500/15 text-violet-300"
                 : "border-white/[0.07] text-white/30 hover:text-white/60 hover:border-white/20"
             }`}
           >
             <SlidersHorizontal size={12} /> Sort
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -333,35 +333,29 @@ export function OrderTable({
 
         <div className="w-px h-4 bg-white/10 shrink-0 hidden sm:block" />
 
-        <div className="flex items-center gap-2">
-          <span className="text-[10px] text-white/20 uppercase tracking-widest shrink-0">
-            From
-          </span>
-          <DatePicker
-            value={filter.date_gte}
-            onChange={(iso) => updateFilter({ date_gte: iso })}
-            placeholder="Start date"
-            className="w-36"
-          />
-          <span className="text-[10px] text-white/20 uppercase tracking-widest shrink-0">
-            To
-          </span>
-          <DatePicker
-            value={filter.date_lte}
-            onChange={(iso) => updateFilter({ date_lte: iso })}
-            placeholder="End date"
-            className="w-36"
-          />
-          {(filter.date_gte || filter.date_lte) && (
-            <button
-              onClick={() =>
-                updateFilter({ date_gte: undefined, date_lte: undefined })
-              }
-              className="w-6 h-6 flex items-center justify-center rounded-md text-white/20 hover:text-white/50 hover:bg-white/6 transition-colors"
-            >
-              <X size={11} />
-            </button>
-          )}
+        <div className="flex items-center gap-2 flex-wrap">
+          <div>
+            <span className="text-[10px] text-white/20 uppercase tracking-widest shrink-0">
+              From
+            </span>
+            <DatePicker
+              value={filter.date_gte}
+              onChange={(iso) => updateFilter({ date_gte: iso })}
+              placeholder="Start date"
+              className="w-36"
+            />
+          </div>
+          <div>
+            <span className="text-[10px] text-white/20 uppercase tracking-widest shrink-0">
+              To
+            </span>
+            <DatePicker
+              value={filter.date_lte}
+              onChange={(iso) => updateFilter({ date_lte: iso })}
+              placeholder="End date"
+              className="w-36"
+            />
+          </div>
         </div>
       </div>
 
