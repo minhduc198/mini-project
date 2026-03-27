@@ -1,4 +1,3 @@
-import { env } from "@/src/config/env";
 import axios, { AxiosInstance } from "axios";
 
 class Http {
