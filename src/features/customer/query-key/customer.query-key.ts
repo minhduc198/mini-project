@@ -1,7 +1,10 @@
-// export const employeeKeys = {
-//   all: ["employees"] as const,
-//   available: (storeId: number) =>
-//     [...employeeKeys.all, "available", storeId] as const,
-//   storeEmployees: (storeId: number) =>
-//     [...employeeKeys.all, "store", storeId] as const,
-// };
+import { GetCustomersListRequest } from "../types";
+
+export const customerKeys = {
+  all: ["customer"] as const,
+
+  list: (params: GetCustomersListRequest) =>
+    ["customer", "list", params] as const,
+
+  stats: () => ["customer", "stats"] as const,
+};

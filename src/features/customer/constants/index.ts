@@ -1,5 +1,5 @@
-import { AddCustomerFormValues } from "../schemas/schemas";
-import { Customer, Group, SortKey } from "../types/types";
+import { AddCustomerFormValues } from "../schemas";
+import { Customer, Group, SortKey } from "../types";
 
 export const GROUP_STYLE: Record<Group, string> = {
   regular: "bg-white/5 text-white/40 border border-white/10",

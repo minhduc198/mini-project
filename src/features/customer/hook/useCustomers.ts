@@ -13,18 +13,19 @@ import {
   CreateCustomerRequest,
   GetCustomersListRequest,
   UpdateCustomerRequest,
-} from "../types/types";
+} from "../types";
+import { customerKeys } from "../query-key/customer.query-key";
 
 export function useCustomers(request: GetCustomersListRequest) {
   const statsQueryCustomer = useQuery({
-    queryKey: ["customer_stats"],
+    queryKey: customerKeys.stats(),
     queryFn: () =>
       fetchCustomersList({ pagination: { page: 1, perPage: 9999 } }),
     refetchOnWindowFocus: false,
   });
 
   const listQueryCustomer = useQuery({
-    queryKey: ["customer_list", request],
+    queryKey: customerKeys.list(request),
     queryFn: () => fetchCustomersList(request),
     refetchOnWindowFocus: false,
   });
@@ -34,8 +35,7 @@ export function useCustomers(request: GetCustomersListRequest) {
       mutationFn: (data: CreateCustomerRequest) => createCustomer(data),
       onSuccess: () => {
         toast.success("Customer created successfully");
-        queryClient.invalidateQueries({ queryKey: ["customer_list"] });
-        queryClient.invalidateQueries({ queryKey: ["customer_stats"] });
+        queryClient.invalidateQueries({ queryKey: customerKeys.all });
       },
       onError: (err: Error) => {
         toast.error(err.message || "Failed to create customer");
@@ -48,23 +48,21 @@ export function useCustomers(request: GetCustomersListRequest) {
       mutationFn: (ids: number[]) => deleteCustomers({ ids }),
       onSuccess: () => {
         toast.success("Customers deleted");
-        queryClient.invalidateQueries({ queryKey: ["customer_list"] });
-        queryClient.invalidateQueries({ queryKey: ["customer_stats"] });
+        queryClient.invalidateQueries({ queryKey: customerKeys.all });
       },
       onError: (err: Error) => {
         toast.error(err.message || "Failed to delete customers");
       },
     });
 
-  const { mutate: UpdateCustomerMutation } = useMutation({
+  const { mutate: updateCustomerMutation } = useMutation({
     mutationFn: (param: UpdateCustomerRequest) => updateCustomer(param),
     onSuccess: () => {
       toast.success("Customers updated");
-      queryClient.invalidateQueries({ queryKey: ["customer_list"] });
-      queryClient.invalidateQueries({ queryKey: ["customer_stats"] });
+      queryClient.invalidateQueries({ queryKey: customerKeys.all });
     },
     onError: (err: Error) => {
-      toast.error(err.message || "Failed to updated customers");
+      toast.error(err.message || "Failed to update customers");
     },
   });
 
@@ -73,7 +71,7 @@ export function useCustomers(request: GetCustomersListRequest) {
     listQueryCustomer,
     createCustomer: createCustomerMutation,
     deleteCustomers: deleteCustomersMutation,
-    updateCustomer: UpdateCustomerMutation,
+    updateCustomer: updateCustomerMutation,
     isCreating,
     isDeleting,
   };

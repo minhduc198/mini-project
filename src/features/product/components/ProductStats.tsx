@@ -2,16 +2,16 @@
 
 import { formatShortNumber } from "@/lib/utils";
 import { StatCard } from "@/src/features/customer/components/StatCard";
-import { Product } from "@/src/features/product/types/types";
+import { Product } from "@/src/features/product/types";
 import { Package, TrendingUp, AlertTriangle, ShoppingBag } from "lucide-react";
-import { Inventory } from "../../inventory/types/types";
+import { Inventory } from "../../inventory/types";
 
-interface ProductStatsProps {
+interface Props {
   products: Product[];
   inventories: Inventory[];
 }
 
-export function ProductStats({ products, inventories }: ProductStatsProps) {
+export function ProductStats({ products, inventories }: Props) {
   const totalProducts = products.length;
   const totalSales = products.reduce((s, p) => s + (p.sales ?? 0), 0);
   const totalStock = inventories.reduce((s, p) => s + (p.stock ?? 0), 0);

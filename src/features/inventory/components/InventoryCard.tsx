@@ -1,10 +1,10 @@
 "use client";
 
-import { Inventory } from "@/src/features/inventory/types/types";
-import { Product } from "@/src/features/product/types/types";
+import { Inventory } from "@/src/features/inventory/types";
+import { Product } from "@/src/features/product/types";
 import { Edit2, Trash2, Layers } from "lucide-react";
 
-interface InventoryCardProps {
+interface Props {
   inventory: Inventory;
   products: Product[];
   active: boolean;
@@ -20,7 +20,7 @@ export function InventoryCard({
   onClick,
   onEdit,
   onDelete,
-}: InventoryCardProps) {
+}: Props) {
   const productCount = products.filter(
     (p) => p.inventory_id === inventory.id,
   ).length;

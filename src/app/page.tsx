@@ -1,20 +1,23 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { Progress } from "@/src/components/ui/progress";
 import { formatShortNumber } from "@/lib/utils";
 import ColumnChart from "@/src/components/charts/ColumnChart";
 import CustomTable from "@/src/components/CustomTable";
 import KpiCard from "@/src/components/KpiCard";
+import { Progress } from "@/src/components/ui/progress";
 import { DEFAULT_PAGE } from "@/src/constants";
 import { fetchCustomersList } from "@/src/features/customer/api/services";
-import { fetchOrdersList } from "@/src/features/order/services";
 import { GetOrdersListResponse, Order } from "@/src/features/order/types";
 import { ColumnHeader } from "@/src/types";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowUpRight, ChevronRight } from "lucide-react";
-import { useMemo, useState } from "react";
+import { ChevronRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { useMemo, useState } from "react";
+import { Button } from "../components/ui/button";
+import { fetchOrdersList } from "../features/order/api/services";
+import { STATUS_LABELS, STATUS_STYLE } from "../features/order/constants";
 
 const columnHeader: ColumnHeader<Order>[] = [
   {
@@ -52,15 +55,9 @@ const columnHeader: ColumnHeader<Order>[] = [
     label: "Status",
     cellRender: (row) => (
       <span
-        className={`px-2 py-1 rounded text-xs font-medium  ${
-          row.status === "delivered"
-            ? "bg-green-100 text-green-600"
-            : row.status === "cancelled"
-              ? "bg-red-100 text-red-600"
-              : "bg-yellow-100 text-yellow-600"
-        }`}
+        className={`px-2 py-0.5 rounded-md text-[11px] font-medium whitespace-nowrap ${STATUS_STYLE[row.status] ?? "bg-white/5 text-white/40 border border-white/10"}`}
       >
-        {row.status === "ordered" ? "pending" : row.status}
+        {STATUS_LABELS[row.status] ?? row.status}
       </span>
     ),
   },
@@ -155,18 +152,21 @@ export default function Dashboard() {
 
           <div className="flex flex-col gap-4">
             <div className="rounded-xl border border-white/[0.07] bg-overlay p-5 flex-1">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-semibold">Top Reps</h3>
-                <ArrowUpRight size={14} className="text-white/20" />
-              </div>
-              <div className="space-y-4">
+              <h3 className="text-sm font-semibold">Top Reps</h3>
+              <div className="space-y-4 mt-4">
                 {topReps.map((r, i) => (
                   <div key={r.name} className="flex items-center gap-3">
                     <div className="text-[10px] text-white/20 w-3 shrink-0 font-mono">
                       {i + 1}
                     </div>
                     <div className="w-7 h-7 shrink-0 rounded-full overflow-hidden">
-                      <img src={r.avatar} alt="" />
+                      <Image
+                        sizes="28px"
+                        width={28}
+                        height={28}
+                        src={r.avatar ?? ""}
+                        alt=""
+                      />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-1.5">
@@ -190,9 +190,11 @@ export default function Dashboard() {
           <div className="xl:col-span-2 rounded-xl border border-white/[0.07] bg-overlay overflow-hidden">
             <div className="flex items-center justify-between px-5 py-4 border-b border-white/6">
               <h3 className="text-sm font-semibold">Active Orders</h3>
-              <button className="text-xs text-violet-400 hover:text-violet-300 flex items-center gap-1 transition-colors">
-                View all <ChevronRight size={12} />
-              </button>
+              <Link href="/orders">
+                <Button className="text-xs text-violet-400 hover:text-violet-300 bg-transparent flex items-center gap-1 transition-colors">
+                  View all <ChevronRight size={12} />
+                </Button>
+              </Link>
             </div>
             <CustomTable
               columnHeader={columnHeader}

@@ -1,4 +1,4 @@
-import { ApiResponse, ApiResponseList, SORT, UrlQuery } from "@/src/types";
+import { ApiResponse, ApiResponseList, SORT } from "@/src/types";
 
 export type Group =
   | "regular"
@@ -63,20 +63,6 @@ export type Groups =
   | "regular"
   | "returns"
   | "reviewer";
-
-export interface CustomerParam {
-  id?: string;
-  last_seen_gte?: string;
-  last_seen_lte?: string;
-  groups: string;
-  has_newsletter: string;
-  nb_orders_gte: string;
-  q: string;
-}
-
-export type CustomerUrlQuery = UrlQuery<CustomerParam>;
-
-// export type TableColumnsCustomer = TableColumns<Customer>[];
 
 export type DeleteCustomersRequest = {
   ids: number[];

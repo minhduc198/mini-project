@@ -8,7 +8,7 @@ import {
   CreateCustomerRequest,
   Customer,
   GetCustomersListRequest,
-} from "@/src/features/customer/types/types";
+} from "@/src/features/customer/types";
 import { SORT } from "@/src/types";
 import {
   Plus,

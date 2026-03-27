@@ -12,19 +12,20 @@ import {
   CreateProductRequest,
   GetProductListRequest,
   UpdateProductRequest,
-} from "@/src/features/product/types/types";
+} from "@/src/features/product/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { productKeys } from "../query-key/product.query-key";
 
 export function useProducts(request: GetProductListRequest) {
   const statsQueryProduct = useQuery({
-    queryKey: ["product_stats"],
+    queryKey: productKeys.stats(),
     queryFn: () =>
       fetchProductsList({ pagination: { page: 1, perPage: 9999 } }),
     refetchOnWindowFocus: false,
   });
 
   const listQueryProduct = useQuery({
-    queryKey: ["product_list", request],
+    queryKey: productKeys.list(request),
     queryFn: () => fetchProductsList(request),
     refetchOnWindowFocus: false,
   });
@@ -33,8 +34,7 @@ export function useProducts(request: GetProductListRequest) {
     mutationFn: (data: CreateProductRequest) => createProduct(data),
     onSuccess: () => {
       toast.success("Product created successfully");
-      queryClient.invalidateQueries({ queryKey: ["product_list"] });
-      queryClient.invalidateQueries({ queryKey: ["product_stats"] });
+      queryClient.invalidateQueries({ queryKey: productKeys.all });
     },
     onError: (err: Error) => {
       toast.error(err.message || "Failed to create product");
@@ -45,8 +45,7 @@ export function useProducts(request: GetProductListRequest) {
     mutationFn: (ids: number[]) => deleteProducts({ ids }),
     onSuccess: () => {
       toast.success("Products deleted");
-      queryClient.invalidateQueries({ queryKey: ["product_list"] });
-      queryClient.invalidateQueries({ queryKey: ["product_stats"] });
+      queryClient.invalidateQueries({ queryKey: productKeys.all });
     },
     onError: (err: Error) => {
       toast.error(err.message || "Failed to delete products");
@@ -56,8 +55,8 @@ export function useProducts(request: GetProductListRequest) {
   const { mutate: updateProductMutation } = useMutation({
     mutationFn: (param: UpdateProductRequest) => updateProduct(param),
     onSuccess: () => {
-      toast.success("Products Edited");
-      queryClient.invalidateQueries({ queryKey: ["product_list"] });
+      toast.success("Product updated successfully");
+      queryClient.invalidateQueries({ queryKey: productKeys.all });
     },
     onError: (err: Error) => {
       toast.error(err.message || "Failed to edit product");

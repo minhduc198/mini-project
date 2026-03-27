@@ -1,41 +1,41 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { formatShortNumber } from "@/lib/utils";
+import { formatDate, formatShortNumber } from "@/lib/utils";
 import { Checkbox } from "@/src/components/CheckBox";
 import CustomTable from "@/src/components/CustomTable";
 import { Pagination } from "@/src/components/Pagination";
 import { SortBtn } from "@/src/components/SortBtn";
 import { Input } from "@/src/components/ui/input";
-import { DEFAULT_PAGE } from "@/src/constants";
+import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from "@/src/constants";
 import { FilterPill } from "@/src/features/customer/components/FilterPill";
-import { Inventory } from "@/src/features/inventory/types";
-import { GetProductListRequest, Product } from "@/src/features/product/types";
+import { Product } from "@/src/features/product/types";
 import { ColumnHeader, SORT } from "@/src/types";
 import { Pencil, Search, SlidersHorizontal, Trash2, X } from "lucide-react";
 import { useMemo, useState } from "react";
-import { SortKey } from "../../customer/types";
-import { Button } from "@/src/components/ui/button";
-import { SORT_OPTIONS } from "../constants";
 import Image from "next/image";
+import { GetOrdersListRequest, Order, OrderStatus } from "../types";
+import { DatePicker } from "@/src/components/DatePickerField";
+import { Button } from "@/src/components/ui/button";
+import { SORT_OPTIONS, STATUS_LABELS, STATUS_STYLE } from "../constants";
 
 interface Props {
-  products: Product[];
+  orders: Order[];
   total: number;
   isLoading: boolean;
-  inventories: Inventory[];
-  request: GetProductListRequest;
-  onRequestChange: (req: GetProductListRequest) => void;
+  request: GetOrdersListRequest;
+  products: Product[];
+  onRequestChange: (req: GetOrdersListRequest) => void;
   onDelete: (ids: number[]) => void;
-  onEdit: (product: Product) => void;
+  onEdit: (order: Order) => void;
 }
 
-export function ProductTable({
-  products,
+export function OrderTable({
+  orders,
   total,
   isLoading,
-  inventories,
   request,
+  products,
   onRequestChange,
   onDelete,
   onEdit,
@@ -45,14 +45,19 @@ export function ProductTable({
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const filter = request.filter ?? {};
-  const sortField = request.sort?.field ?? "reference";
+  const sortField = request.sort?.field ?? "id";
   const sortDir = request.sort?.order === SORT.ASC ? "asc" : ("desc" as const);
   const currentPage = request.pagination?.page ?? DEFAULT_PAGE;
-  const perPage = request.pagination?.perPage ?? 10;
+  const perPage = request.pagination?.perPage ?? DEFAULT_PER_PAGE;
   const totalPages = Math.max(1, Math.ceil(total / perPage));
-  const hasActiveFilter = !!(filter.q || filter.inventory_id);
+  const hasActiveFilter = !!(
+    filter.q ||
+    filter.status ||
+    filter.date_gte ||
+    filter.date_lte
+  );
 
-  const updateFilter = (patch: Partial<GetProductListRequest["filter"]>) => {
+  const updateFilter = (patch: Partial<GetOrdersListRequest["filter"]>) => {
     onRequestChange({
       ...request,
       filter: { ...filter, ...patch },
@@ -67,7 +72,7 @@ export function ProductTable({
     });
   };
 
-  const handleSort = (key: SortKey<Product>) => {
+  const handleSort = (key: string) => {
     const sameField = sortField === key;
     const newOrder =
       sameField && request.sort?.order === SORT.DESC ? SORT.ASC : SORT.DESC;
@@ -86,7 +91,7 @@ export function ProductTable({
     });
   };
 
-  const pageIds = products.map((p) => p.id);
+  const pageIds = orders.map((o) => o.id);
   const allPageSelected =
     pageIds.length > 0 && pageIds.every((id) => selectedIds.has(id));
   const somePageSelected =
@@ -115,10 +120,10 @@ export function ProductTable({
     setShowDeleteConfirm(false);
   };
 
-  const columns: ColumnHeader<Product>[] = useMemo(
+  const columns: ColumnHeader<Order>[] = useMemo(
     () => [
       {
-        id: "id" as keyof Product,
+        id: "id" as keyof Order,
         label: "",
         cellRender: (row) => (
           <Checkbox
@@ -128,83 +133,122 @@ export function ProductTable({
         ),
       },
       {
-        id: "thumbnail",
-        label: "",
-        cellRender: (row) => (
-          <div className="w-9 h-9 rounded-lg overflow-hidden ring-1 ring-white/10 bg-white/5 shrink-0 flex items-center justify-center">
-            {row.thumbnail ? (
-              <Image
-                sizes="36px"
-                width={36}
-                height={36}
-                src={row.thumbnail}
-                alt={row.reference}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <span className="text-[10px] text-white/20">N/A</span>
-            )}
-          </div>
-        ),
+        id: "customer_id",
+        label: "Customer",
+        cellRender: (row) => {
+          const c = row.customer;
+          return (
+            <div className="flex items-center gap-2.5">
+              <div className="w-7 h-7 relative rounded-full overflow-hidden ring-1 ring-white/10 bg-white/5 shrink-0">
+                {c?.avatar ? (
+                  <Image
+                    width={28}
+                    height={28}
+                    src={c.avatar}
+                    alt={c.first_name ?? ""}
+                    className="object-cover"
+                  />
+                ) : (
+                  <span className="flex items-center justify-center w-full h-full text-[10px] text-white/40 font-medium">
+                    {c?.first_name?.[0]}
+                    {c?.last_name?.[0]}
+                  </span>
+                )}
+              </div>
+              <div className="min-w-0">
+                <div className="text-white/75 text-xs font-medium whitespace-nowrap">
+                  {c?.first_name} {c?.last_name}
+                </div>
+                <div className="text-white/25 text-[10px] truncate max-w-[160px]">
+                  {c?.email}
+                </div>
+              </div>
+            </div>
+          );
+        },
       },
       {
         id: "reference",
         label: "Reference",
         cellRender: (row) => (
-          <div>
-            <div className="font-medium text-white/80 leading-none mb-1 whitespace-nowrap text-xs">
-              {row.reference}
+          <span className="font-mono text-violet-300/80 text-xs">
+            {row.reference}
+          </span>
+        ),
+      },
+      {
+        id: "date",
+        label: "Date",
+        cellRender: (row) => (
+          <span className="text-white/40 text-[11px] whitespace-nowrap">
+            {formatDate(row.date)}
+          </span>
+        ),
+      },
+
+      {
+        id: "address" as keyof Order,
+        label: "Address",
+        cellRender: (row) => (
+          <div className="min-w-0">
+            <div className="text-white/45 text-[11px] truncate max-w-[140px]">
+              {row.address ?? row.customer?.address ?? "—"}
             </div>
-            {row.description && (
-              <div className="text-[11px] text-white/25 truncate max-w-[200px]">
-                {row.description}
+            {row.customer?.city && (
+              <div className="text-white/25 text-[10px]">
+                {row.customer.city}
               </div>
             )}
           </div>
         ),
       },
       {
-        id: "inventory_id",
-        label: "Category",
-        cellRender: (row) => {
-          const inv = inventories.find((i) => i.id === row.inventory_id);
-          return (
-            <span className="px-2 py-0.5 rounded-md text-[11px] font-medium bg-sky-500/15 text-sky-300 border border-sky-500/20 whitespace-nowrap">
-              {inv?.name ?? `#${row.inventory_id}`}
-            </span>
-          );
-        },
-      },
-      {
-        id: "price",
-        label: "Price",
+        id: "status",
+        label: "Status",
         cellRender: (row) => (
-          <span className="text-emerald-400 font-medium tabular-nums text-xs">
-            {formatShortNumber(row.price)}
-          </span>
-        ),
-      },
-      {
-        id: "sales",
-        label: "Sales",
-        cellRender: (row) => (
-          <span className="font-mono text-white/50 text-xs tabular-nums">
-            {row.sales ?? 0}
-          </span>
-        ),
-      },
-      {
-        id: "width",
-        label: "W × H",
-        cellRender: (row) => (
-          <span className="text-white/30 text-[11px] whitespace-nowrap">
-            {row.width ?? "—"} × {row.height ?? "—"}
+          <span
+            className={`px-2 py-0.5 rounded-md text-[11px] font-medium whitespace-nowrap ${STATUS_STYLE[row.status] ?? "bg-white/5 text-white/40 border border-white/10"}`}
+          >
+            {STATUS_LABELS[row.status] ?? row.status}
           </span>
         ),
       },
 
       {
-        id: "edit" as keyof Product,
+        id: "total_ex_taxes",
+        label: "Subtotal",
+        cellRender: (row) => (
+          <span className="text-white/35 text-xs tabular-nums">
+            {formatShortNumber(row.total_ex_taxes)}
+          </span>
+        ),
+      },
+      {
+        id: "total",
+        label: "Total",
+        cellRender: (row) => (
+          <span className="text-emerald-400 font-medium tabular-nums text-xs">
+            {formatShortNumber(row.total)}
+          </span>
+        ),
+      },
+      {
+        id: "returned",
+        label: "Returned",
+        cellRender: (row) => (
+          <span
+            className={`px-2 py-0.5 rounded-md text-[11px] font-medium ${
+              row.returned
+                ? "bg-amber-500/15 text-amber-400 border border-amber-500/20"
+                : "bg-white/5 text-white/25 border border-white/10"
+            }`}
+          >
+            {row.returned ? "Yes" : "No"}
+          </span>
+        ),
+      },
+      {
+        id: "edit" as keyof Order,
         label: "",
         cellRender: (row) => (
           <Button
@@ -217,11 +261,11 @@ export function ProductTable({
         ),
       },
     ],
-    [selectedIds, inventories, onEdit],
+    [selectedIds, onEdit, products],
   );
 
   return (
-    <div className="rounded-xl border border-white/[0.07] bg-overlay">
+    <div className="rounded-xl border border-white/[0.07] bg-[#0F0F1C]">
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 px-5 py-4 border-b border-white/6">
         <div className="relative flex-1 max-w-xs">
           <Search
@@ -245,47 +289,79 @@ export function ProductTable({
         </div>
         <div className="flex items-center gap-2 ml-auto">
           {hasActiveFilter && (
-            <button
+            <Button
               onClick={resetFilters}
-              className="flex items-center gap-1 text-[11px] px-3 py-1.5 rounded-md text-red-400/60 hover:text-red-400 border border-red-500/20 hover:border-red-500/40 transition-colors"
+              className="flex items-center gap-1 text-[11px] px-3 py-1.5  bg-transparent rounded-md text-red-400/60 hover:text-red-400 border border-red-500/20 hover:border-red-500/40 transition-colors"
             >
               <X size={11} /> Reset
-            </button>
+            </Button>
           )}
           <button
             onClick={() => setShowSort(!showSort)}
-            className={`flex items-center gap-1.5 text-[11px] px-3 py-1.5 rounded-md border transition-colors ${showSort ? "border-violet-500/40 bg-violet-500/15 text-violet-300" : "border-white/[0.07] text-white/30 hover:text-white/60 hover:border-white/20"}`}
+            className={`flex items-center gap-1.5 text-[11px] px-3 py-1.5 rounded-md border transition-colors ${
+              showSort
+                ? "border-violet-500/40 bg-violet-500/15 text-violet-300"
+                : "border-white/[0.07] text-white/30 hover:text-white/60 hover:border-white/20"
+            }`}
           >
             <SlidersHorizontal size={12} /> Sort
           </button>
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-x-5 gap-y-2 px-5 py-3 border-b border-white/6">
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-3 px-5 py-3 border-b border-white/6">
         <div className="flex items-center gap-1.5 flex-wrap">
           <span className="text-[10px] text-white/20 uppercase tracking-widest mr-1 shrink-0">
-            Category
+            Status
           </span>
           <FilterPill
             label="All"
-            active={!filter.inventory_id}
-            onClick={() => updateFilter({ inventory_id: undefined })}
+            active={!filter.status}
+            onClick={() => updateFilter({ status: undefined })}
           />
-          {inventories.map((inv) => (
+          {(["ordered", "delivered", "cancelled"] as OrderStatus[]).map((s) => (
             <FilterPill
-              key={inv.id}
-              label={inv.name ?? `#${inv.id}`}
-              active={filter.inventory_id === String(inv.id)}
+              key={s}
+              label={STATUS_LABELS[s]}
+              active={filter.status === s}
               onClick={() =>
-                updateFilter({
-                  inventory_id:
-                    filter.inventory_id === String(inv.id)
-                      ? undefined
-                      : String(inv.id),
-                })
+                updateFilter({ status: filter.status === s ? undefined : s })
               }
             />
           ))}
+        </div>
+
+        <div className="w-px h-4 bg-white/10 shrink-0 hidden sm:block" />
+
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] text-white/20 uppercase tracking-widest shrink-0">
+            From
+          </span>
+          <DatePicker
+            value={filter.date_gte}
+            onChange={(iso) => updateFilter({ date_gte: iso })}
+            placeholder="Start date"
+            className="w-36"
+          />
+          <span className="text-[10px] text-white/20 uppercase tracking-widest shrink-0">
+            To
+          </span>
+          <DatePicker
+            value={filter.date_lte}
+            onChange={(iso) => updateFilter({ date_lte: iso })}
+            placeholder="End date"
+            className="w-36"
+          />
+          {(filter.date_gte || filter.date_lte) && (
+            <button
+              onClick={() =>
+                updateFilter({ date_gte: undefined, date_lte: undefined })
+              }
+              className="w-6 h-6 flex items-center justify-center rounded-md text-white/20 hover:text-white/50 hover:bg-white/6 transition-colors"
+            >
+              <X size={11} />
+            </button>
+          )}
         </div>
       </div>
 
@@ -316,30 +392,30 @@ export function ProductTable({
             {selectedIds.size} selected
           </span>
           <div className="ml-auto flex items-center gap-2">
-            <button
+            <Button
               onClick={() => setSelectedIds(new Set())}
-              className="text-[11px] text-white/30 hover:text-white/60 px-2.5 py-1.5 rounded-md hover:bg-white/6 transition-colors"
+              className="text-[11px] bg-transparent text-white/30 hover:text-white/60 px-2.5 py-1.5 rounded-md hover:bg-white/6 transition-colors"
             >
               Clear
-            </button>
+            </Button>
             {showDeleteConfirm ? (
               <div className="flex items-center gap-2">
                 <span className="text-[11px] text-red-300/70">
-                  Delete {selectedIds.size} product
+                  Delete {selectedIds.size} order
                   {selectedIds.size > 1 ? "s" : ""}?
                 </span>
-                <button
+                <Button
                   onClick={handleDelete}
                   className="text-[11px] px-3 py-1.5 rounded-md bg-red-500 hover:bg-red-400 text-white font-medium transition-colors"
                 >
                   Confirm
-                </button>
-                <button
+                </Button>
+                <Button
                   onClick={() => setShowDeleteConfirm(false)}
-                  className="text-[11px] px-2.5 py-1.5 rounded-md border border-white/10 text-white/40 hover:text-white/70 transition-colors"
+                  className="text-[11px] px-2.5 py-1.5 bg-transparent rounded-md border border-white/10 text-white/40 hover:text-white/70 transition-colors"
                 >
                   Cancel
-                </button>
+                </Button>
               </div>
             ) : (
               <button
@@ -375,14 +451,14 @@ export function ProductTable({
       <div className="max-w-[1440px] overflow-x-auto scrollbar-hide">
         {isLoading ? (
           <div className="py-20 text-center text-white/20 text-xs">
-            Loading products…
+            Loading orders…
           </div>
-        ) : products.length === 0 ? (
+        ) : orders.length === 0 ? (
           <div className="py-20 text-center text-white/20 text-xs">
-            No products match your filters.
+            No orders match your filters.
           </div>
         ) : (
-          <CustomTable<Product> columnHeader={columns} columnData={products} />
+          <CustomTable<Order> columnHeader={columns} columnData={orders} />
         )}
       </div>
 

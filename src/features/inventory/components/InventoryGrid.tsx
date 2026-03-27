@@ -1,11 +1,11 @@
 "use client";
 
-import { Inventory } from "@/src/features/inventory/types/types";
-import { Product } from "@/src/features/product/types/types";
+import { Inventory } from "@/src/features/inventory/types";
+import { Product } from "@/src/features/product/types";
 import { InventoryCard } from "./InventoryCard";
 import { LayoutGrid, Plus } from "lucide-react";
 
-interface InventoryGridProps {
+interface Props {
   inventories: Inventory[];
   products: Product[];
   activeCategoryId: string | undefined;
@@ -23,7 +23,7 @@ export function InventoryGrid({
   onEdit,
   onDelete,
   onCreate,
-}: InventoryGridProps) {
+}: Props) {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
       <div

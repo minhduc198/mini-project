@@ -12,16 +12,16 @@ import {
   DialogDescription,
 } from "@/src/components/ui/dialog";
 
-import { Inventory } from "@/src/features/inventory/types/types";
+import { Inventory } from "@/src/features/inventory/types";
 import {
   productSchema,
   ProductFormValues,
-} from "@/src/features/product/schemas/schemas";
+} from "@/src/features/product/schemas";
 import {
   CreateProductRequest,
   Product,
   UpdateProductRequest,
-} from "@/src/features/product/types/types";
+} from "@/src/features/product/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, PackagePlus, Pencil } from "lucide-react";
 import { useEffect } from "react";

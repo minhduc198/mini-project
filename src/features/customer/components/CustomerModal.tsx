@@ -5,35 +5,28 @@
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from "@/src/components/ui/dialog";
 
-import { TextFieldInput } from "@/src/components/TextFieldInput";
 import { TextFieldArea } from "@/src/components/TextFieldArea";
+import { TextFieldInput } from "@/src/components/TextFieldInput";
 
-import { addCustomerSchema, AddCustomerFormValues } from "../schemas/schemas";
+import { AddCustomerFormValues, addCustomerSchema } from "../schemas";
 
 import {
   CreateCustomerRequest,
-  UpdateCustomerRequest,
   Customer,
-} from "../types/types";
+  UpdateCustomerRequest,
+} from "../types";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, UserPlus, Pencil } from "lucide-react";
+import { Loader2, Pencil, UserPlus } from "lucide-react";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/src/components/ui/popover";
-import { Button } from "@/src/components/ui/button";
-import { Calendar } from "@/src/components/ui/calendar";
-import { format } from "date-fns";
+import { DatePicker } from "@/src/components/DatePickerField";
 import { SelectField } from "@/src/components/SelectField";
 import { GROUP_LABELS } from "../constants";
 
@@ -77,7 +70,7 @@ export function CustomerModal(props: Props) {
     resolver: zodResolver(addCustomerSchema),
   });
 
-  const { handleSubmit, reset, setValue, watch } = methods;
+  const { handleSubmit, reset, watch } = methods;
 
   const birthday = watch("birthday");
 
@@ -211,32 +204,12 @@ export function CustomerModal(props: Props) {
                     Birthday
                   </label>
 
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        className="w-full justify-start text-xs bg-white/[0.04] border-white/[0.07] text-white/70 hover:bg-white/[0.06]"
-                      >
-                        {birthday
-                          ? format(new Date(birthday), "dd/MM/yyyy")
-                          : "Pick a date"}
-                      </Button>
-                    </PopoverTrigger>
-
-                    <PopoverContent className="w-auto p-0 bg-overlay border-white/[0.08]">
-                      <Calendar
-                        mode="single"
-                        selected={birthday ? new Date(birthday) : undefined}
-                        onSelect={(date: any) => {
-                          if (date) {
-                            setValue("birthday", date.toISOString());
-                          }
-                        }}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
+                  <DatePicker
+                    value={birthday}
+                    onChange={(iso) => reset({ birthday: iso })}
+                    placeholder="Birthday"
+                    className="w-full"
+                  />
                 </div>
               </div>
             </div>
