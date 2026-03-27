@@ -147,21 +147,6 @@ export default function Header() {
           { flex: openMenu },
         )}
       >
-        <div className="flex items-center gap-2">
-          <button className="w-9 h-9 rounded-lg border border-white/[0.08] bg-white/[0.04] flex items-center justify-center text-white/40 hover:text-white/70 hover:bg-white/[0.07] transition-all">
-            <Moon size={15} />
-          </button>
-
-          <button className="relative w-9 h-9 rounded-lg border border-white/[0.08] bg-white/[0.04] flex items-center justify-center text-white/40 hover:text-white/70 hover:bg-white/[0.07] transition-all">
-            <Bell size={15} />
-            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-violet-400">
-              <span className="absolute inset-0 rounded-full bg-violet-400 animate-ping opacity-75" />
-            </span>
-          </button>
-        </div>
-
-        <div className="hidden xl:block w-px h-6 bg-white/[0.06]" />
-
         {mounted && (
           <DropdownMenu open={isOpenProfile} onOpenChange={setIsOpenProfile}>
             <DropdownMenuTrigger asChild>

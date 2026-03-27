@@ -18,7 +18,7 @@ export default function CustomTable<T extends { id: number | string }>({
   columnData,
 }: Props<T>) {
   return (
-    <div>
+    <div className="w-full ">
       <Table>
         <TableHeader>
           <TableRow className="text-[11px] text-white/20 uppercase tracking-wider">

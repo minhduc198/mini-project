@@ -1,10 +1,11 @@
 "use client";
 
-import { formatShortNumber, formatDate } from "@/lib/utils";
+import { formatDate, formatShortNumber } from "@/lib/utils";
 import { Checkbox } from "@/src/components/CheckBox";
 import CustomTable from "@/src/components/CustomTable";
 import { Pagination } from "@/src/components/Pagination";
 import { SortBtn } from "@/src/components/SortBtn";
+import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from "@/src/constants";
 import { FilterPill } from "@/src/features/customer/components/FilterPill";
@@ -27,8 +28,6 @@ import {
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import { GROUP_LABELS, GROUP_STYLE, LIST_SORT_BY } from "../constants";
-import { Button } from "@/src/components/ui/button";
-import { TextFieldInput } from "@/src/components/TextFieldInput";
 
 interface Props {
   customers: Customer[];
@@ -307,7 +306,7 @@ export function CustomerTable({
   );
 
   return (
-    <div className="rounded-xl border border-white/[0.07] bg-overlay max-w-285 ">
+    <div className="rounded-xl border border-white/[0.07] bg-overlay w-full">
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 px-5 py-4 border-b border-white/6">
         <div className="relative flex-1 max-w-xs">
           <Search

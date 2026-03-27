@@ -372,7 +372,7 @@ export function ProductTable({
         </div>
       )}
 
-      <div className="max-w-[1440px] overflow-x-auto scrollbar-hide">
+      <div className="w-full overflow-x-auto scrollbar-hide">
         {isLoading ? (
           <div className="py-20 text-center text-white/20 text-xs">
             Loading products…

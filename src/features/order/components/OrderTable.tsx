@@ -265,7 +265,7 @@ export function OrderTable({
   );
 
   return (
-    <div className="rounded-xl border border-white/[0.07] bg-[#0F0F1C]">
+    <div className="rounded-xl border border-white/[0.07] bg-[#0F0F1C] w-full">
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 px-5 py-4 border-b border-white/6">
         <div className="relative flex-1 max-w-full xl:max-w-xs ">
           <Search
@@ -442,7 +442,7 @@ export function OrderTable({
         </div>
       )}
 
-      <div className="max-w-[1440px] overflow-x-auto scrollbar-hide">
+      <div className="overflow-x-auto scrollbar-hide">
         {isLoading ? (
           <div className="py-20 text-center text-white/20 text-xs">
             Loading orders…

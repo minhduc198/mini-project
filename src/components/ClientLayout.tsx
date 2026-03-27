@@ -34,9 +34,9 @@ export default function ClientLayout({
       <AppSidebar />
 
       <Header />
-      <SidebarInset className="mt-[76px] px-4 py-6">
+      <SidebarInset className="mt-[76px] px-4 py-6 min-w-0 overflow-hidden">
         <QueryClientProvider client={queryClient}>
-          <main>{children}</main>
+          <main className="w-full min-w-0">{children}</main>
         </QueryClientProvider>
       </SidebarInset>
     </SidebarProvider>

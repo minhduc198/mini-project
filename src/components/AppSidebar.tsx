@@ -127,25 +127,6 @@ export function AppSidebar() {
           })}
         </div>
       </SidebarContent>
-
-      <SidebarFooter
-        style={{ backgroundColor: "#0C0C18" }}
-        className="px-3 py-4 border-t border-white/[0.06] !bg-[#0C0C18]"
-      >
-        {isMobile || isExpanded ? (
-          <div className="px-3 py-2.5 rounded-lg bg-violet-500/10 border border-violet-500/20">
-            <p className="text-[11px] text-violet-300 font-medium">Pro Plan</p>
-            <p className="text-[10px] text-white/30 mt-0.5">6 days remaining</p>
-            <div className="mt-2 h-1 bg-white/[0.06] rounded-full overflow-hidden">
-              <div className="h-full w-[60%] bg-gradient-to-r from-violet-500 to-indigo-500 rounded-full" />
-            </div>
-          </div>
-        ) : (
-          <div className="flex justify-center py-1">
-            <div className="w-2 h-2 rounded-full bg-violet-400/60" />
-          </div>
-        )}
-      </SidebarFooter>
     </Sidebar>
   );
 }
