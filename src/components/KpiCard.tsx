@@ -44,7 +44,7 @@ export default function KpiCard({ customerList, orderList }: Props) {
         icon: DollarSign,
         color: "from-violet-500/20 to-violet-500/0",
         accent: "#8B5CF6",
-        sub: "vs last quarter",
+        sub: "of this month",
       },
       {
         label: "New Contacts",

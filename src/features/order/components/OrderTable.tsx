@@ -247,6 +247,7 @@ export function OrderTable({
           </span>
         ),
       },
+
       {
         id: "edit" as keyof Order,
         label: "",

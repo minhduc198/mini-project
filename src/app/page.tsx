@@ -87,6 +87,7 @@ export default function Dashboard() {
     refetchOnWindowFocus: false,
   });
   const customerList = customerListData?.data ?? [];
+  console.log("🚀 ~ Dashboard ~ customerList:", customerList);
 
   const { data: orderListData } = useQuery<GetOrdersListResponse>({
     queryKey: orderKeys.all,
