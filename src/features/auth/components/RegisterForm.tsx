@@ -6,11 +6,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import { TextFieldInput } from "@/src/components/TextFieldInput";
 import { register } from "../api/services";
 import { RegisterFormValues, registerSchema } from "../schemas";
 import { useMutation } from "@tanstack/react-query";
+import { toast } from "@/lib/toast";
 
 export function RegisterForm() {
   const router = useRouter();
@@ -29,12 +29,13 @@ export function RegisterForm() {
 
   const { handleSubmit } = methods;
 
-  const {mutate: registerMutate} = useMutation({
-    mutationFn: (values: RegisterFormValues) => register(values.email, values.password),
+  const { mutate: registerMutate } = useMutation({
+    mutationFn: (values: RegisterFormValues) =>
+      register(values.email, values.password),
     onSuccess: () => {
       toast.success("Account created! Please sign in.");
       router.push("/login");
-      setIsLoading(false)
+      setIsLoading(false);
     },
     onError: (error: unknown) => {
       const message =
@@ -42,13 +43,13 @@ export function RegisterForm() {
           ? error.message
           : "Registration failed. Please try again.";
       toast.error(message);
-      setIsLoading(false)
+      setIsLoading(false);
     },
-  })
+  });
 
   const onSubmit = (values: RegisterFormValues) => {
-    setIsLoading(true)
-    registerMutate(values)
+    setIsLoading(true);
+    registerMutate(values);
   };
 
   return (

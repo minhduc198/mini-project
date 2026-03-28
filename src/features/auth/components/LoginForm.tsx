@@ -7,9 +7,9 @@ import { Eye, EyeOff, Loader2, LogIn, Zap } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import { login } from "../api/services";
 import { LoginFormValues, loginSchema } from "../schemas";
+import { toast } from "@/lib/toast";
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
