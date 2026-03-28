@@ -15,11 +15,11 @@ import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { Button } from "../components/ui/button";
-import { fetchOrdersList } from "../features/order/api/services";
-import { STATUS_LABELS, STATUS_STYLE } from "../features/order/constants";
-import { customerKeys } from "../features/customer/query-key/customer.query-key";
-import { orderKeys } from "../features/order/query-key/order.query-key";
+import { Button } from "../../components/ui/button";
+import { fetchOrdersList } from "../../features/order/api/services";
+import { STATUS_LABELS, STATUS_STYLE } from "../../features/order/constants";
+import { customerKeys } from "../../features/customer/query-key/customer.query-key";
+import { orderKeys } from "../../features/order/query-key/order.query-key";
 
 const columnHeader: ColumnHeader<Order>[] = [
   {
@@ -87,7 +87,7 @@ export default function Dashboard() {
     refetchOnWindowFocus: false,
   });
   const customerList = customerListData?.data ?? [];
-  console.log("🚀 ~ Dashboard ~ customerList:", customerList);
+
 
   const { data: orderListData } = useQuery<GetOrdersListResponse>({
     queryKey: orderKeys.all,

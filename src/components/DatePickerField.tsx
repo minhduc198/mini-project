@@ -103,7 +103,7 @@ export function DatePicker({
             },
           }}
         />
-        {/* Today shortcut */}
+
         <div className="px-4 pb-3 pt-0 border-t border-white/[0.06] flex justify-end">
           <button
             type="button"
