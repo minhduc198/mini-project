@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/src/components/ui/button";
 import { Inventory } from "@/src/features/inventory/types";
 import { Product } from "@/src/features/product/types";
 import { Edit2, Trash2, Layers } from "lucide-react";
@@ -48,26 +49,30 @@ export function InventoryCard({
         </div>
 
         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
-          <button
+          <Button
+            type="button"
+            variant="ghost"
             onClick={(e) => {
               e.stopPropagation();
               onEdit();
             }}
-            className="w-6 h-6 rounded-md flex items-center justify-center text-white/25 hover:text-sky-400 hover:bg-sky-500/10 transition-colors"
+            className="w-6 h-6 rounded-md flex items-center justify-center text-white/25 hover:text-sky-400 hover:bg-sky-500/10 transition-colors min-h-6 p-0"
             title="Edit"
           >
             <Edit2 size={11} />
-          </button>
-          <button
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
             onClick={(e) => {
               e.stopPropagation();
               onDelete();
             }}
-            className="w-6 h-6 rounded-md flex items-center justify-center text-white/25 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+            className="w-6 h-6 rounded-md flex items-center justify-center text-white/25 hover:text-red-400 hover:bg-red-500/10 transition-colors min-h-6 p-0"
             title="Delete"
           >
             <Trash2 size={11} />
-          </button>
+          </Button>
         </div>
       </div>
 

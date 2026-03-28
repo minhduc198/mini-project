@@ -4,6 +4,8 @@ import { format, isValid, parseISO } from "date-fns";
 import { CalendarDays } from "lucide-react";
 import { Controller, useFormContext } from "react-hook-form";
 
+import { cn } from "@/lib/utils";
+import { Button } from "@/src/components/ui/button";
 import { Calendar } from "@/src/components/ui/calendar";
 import {
   Popover,
@@ -32,9 +34,10 @@ export function DatePicker({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <button
+        <Button
           type="button"
-          className={`w-full flex items-center gap-2 bg-white/[0.04] border rounded-lg px-3 py-2 text-xs transition-colors text-left
+          variant="ghost"
+          className={`w-full flex items-center gap-2 bg-white/[0.04] border rounded-lg px-3 py-2 text-xs transition-colors text-left h-auto font-normal justify-start
             ${selected ? "border-white/[0.07] hover:border-white/20" : "border-white/[0.07] hover:border-white/20"}
             ${display ? "text-white/80" : "text-white/25"}
             ${className ?? ""}`}
@@ -44,7 +47,7 @@ export function DatePicker({
             className={display ? "text-violet-400" : "text-white/20"}
           />
           {display ?? placeholder}
-        </button>
+        </Button>
       </PopoverTrigger>
       <PopoverContent
         className="w-auto p-0 border border-white/[0.08] bg-[#0F0F1C] shadow-2xl shadow-black/60"
@@ -79,7 +82,12 @@ export function DatePicker({
             hidden: "invisible",
           }}
           components={{
-            DayButton: ({ day, modifiers, ...props }: React.ComponentProps<typeof DayButton>) => {
+            DayButton: ({
+              day,
+              modifiers,
+              className,
+              ...props
+            }: React.ComponentProps<typeof DayButton>) => {
               const isSelected =
                 modifiers.selected &&
                 !modifiers.range_start &&
@@ -88,16 +96,18 @@ export function DatePicker({
               const isToday = modifiers.today;
 
               return (
-                <button
+                <Button
                   {...props}
-                  className={`w-8 h-8 rounded-lg text-xs transition-all flex items-center justify-center mx-auto
-                    ${
-                      isSelected
-                        ? "bg-violet-500 text-white font-semibold shadow-lg shadow-violet-500/30"
-                        : isToday
-                          ? "border border-violet-500/40 text-violet-300"
-                          : "text-white/50 hover:bg-white/[0.06] hover:text-white/80"
-                    }`}
+                  variant="ghost"
+                  className={cn(
+                    "w-8 h-8 rounded-lg text-xs transition-all flex items-center justify-center mx-auto h-8 min-h-8 p-0 font-normal",
+                    isSelected
+                      ? "bg-violet-500 text-white font-semibold shadow-lg shadow-violet-500/30 hover:bg-violet-500 hover:text-white"
+                      : isToday
+                        ? "border border-violet-500/40 text-violet-300"
+                        : "text-white/50 hover:bg-white/[0.06] hover:text-white/80",
+                    className,
+                  )}
                 />
               );
             },
@@ -105,13 +115,14 @@ export function DatePicker({
         />
 
         <div className="px-4 pb-3 pt-0 border-t border-white/[0.06] flex justify-end">
-          <button
+          <Button
             type="button"
+            variant="ghost"
             onClick={() => onChange?.(new Date().toISOString())}
-            className="text-[11px] text-violet-400 hover:text-violet-300 px-2.5 py-1 rounded-md hover:bg-violet-500/10 transition-colors"
+            className="text-[11px] text-violet-400 hover:text-violet-300 px-2.5 py-1 rounded-md hover:bg-violet-500/10 transition-colors h-auto font-normal"
           >
             Today
-          </button>
+          </Button>
         </div>
       </PopoverContent>
     </Popover>

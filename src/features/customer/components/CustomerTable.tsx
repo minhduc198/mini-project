@@ -321,34 +321,40 @@ export function CustomerTable({
             className="w-full bg-white/4 border border-white/[0.07] rounded-lg pl-8 pr-8 py-2 text-xs placeholder-white/20 focus:outline-none focus:border-violet-500/50 focus:bg-white/6 transition-colors"
           />
           {filter.q && (
-            <button
+            <Button
+              type="button"
+              variant="ghost"
               onClick={() => updateFilter({ q: undefined })}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/20 hover:text-white/50"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/20 hover:text-white/50 h-auto p-0.5 hover:bg-transparent"
             >
               <X size={12} />
-            </button>
+            </Button>
           )}
         </div>
 
         <div className="flex items-center gap-2 ml-auto">
           {hasActiveFilter && (
-            <button
+            <Button
+              type="button"
+              variant="ghost"
               onClick={resetFilters}
-              className="flex items-center gap-1 text-[11px] px-3 py-1.5 rounded-md text-red-400/60 hover:text-red-400 border border-red-500/20 hover:border-red-500/40 transition-colors"
+              className="flex items-center gap-1 text-[11px] px-3 py-1.5 rounded-md text-red-400/60 hover:text-red-400 border border-red-500/20 hover:border-red-500/40 transition-colors h-auto"
             >
               <X size={11} /> Reset
-            </button>
+            </Button>
           )}
-          <button
+          <Button
+            type="button"
+            variant="ghost"
             onClick={() => setShowSort(!showSort)}
-            className={`flex items-center gap-1.5 text-[11px] px-3 py-1.5 rounded-md border transition-colors ${
+            className={`flex items-center gap-1.5 text-[11px] px-3 py-1.5 rounded-md border transition-colors h-auto ${
               showSort
-                ? "border-violet-500/40 bg-violet-500/15 text-violet-300"
+                ? "border-violet-500/40 bg-violet-500/15 text-violet-300 hover:bg-violet-500/15 hover:text-violet-300"
                 : "border-white/[0.07] text-white/30 hover:text-white/60 hover:border-white/20"
             }`}
           >
             <SlidersHorizontal size={12} /> Sort
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -433,38 +439,46 @@ export function CustomerTable({
             {selectedIds.size} selected
           </span>
           <div className="ml-auto flex items-center gap-2">
-            <button
+            <Button
+              type="button"
+              variant="ghost"
               onClick={() => setSelectedIds(new Set())}
-              className="text-[11px] text-white/30 hover:text-white/60 px-2.5 py-1.5 rounded-md hover:bg-white/6 transition-colors"
+              className="text-[11px] text-white/30 hover:text-white/60 px-2.5 py-1.5 rounded-md hover:bg-white/6 transition-colors h-auto"
             >
               Clear
-            </button>
+            </Button>
             {showDeleteConfirm ? (
               <div className="flex items-center gap-2">
                 <span className="text-[11px] text-red-300/70">
                   Delete {selectedIds.size} customer
                   {selectedIds.size > 1 ? "s" : ""}?
                 </span>
-                <button
+                <Button
+                  type="button"
+                  variant="ghost"
                   onClick={handleDelete}
-                  className="text-[11px] px-3 py-1.5 rounded-md bg-red-500 hover:bg-red-400 text-white font-medium transition-colors"
+                  className="text-[11px] px-3 py-1.5 rounded-md bg-red-500 hover:bg-red-400 text-white font-medium transition-colors h-auto"
                 >
                   Confirm
-                </button>
-                <button
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
                   onClick={() => setShowDeleteConfirm(false)}
-                  className="text-[11px] px-2.5 py-1.5 rounded-md border border-white/10 text-white/40 hover:text-white/70 transition-colors"
+                  className="text-[11px] px-2.5 py-1.5 rounded-md border border-white/10 text-white/40 hover:text-white/70 transition-colors h-auto"
                 >
                   Cancel
-                </button>
+                </Button>
               </div>
             ) : (
-              <button
+              <Button
+                type="button"
+                variant="ghost"
                 onClick={() => setShowDeleteConfirm(true)}
-                className="flex items-center gap-1.5 text-[11px] px-3 py-1.5 rounded-md bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 hover:border-red-500/40 transition-colors"
+                className="flex items-center gap-1.5 text-[11px] px-3 py-1.5 rounded-md bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 hover:border-red-500/40 transition-colors h-auto"
               >
                 <Trash2 size={12} /> Delete
-              </button>
+              </Button>
             )}
           </div>
         </div>

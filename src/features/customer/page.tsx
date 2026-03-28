@@ -17,6 +17,7 @@ import {
   TrendingUp,
   Users,
 } from "lucide-react";
+import { Button } from "@/src/components/ui/button";
 import { useState } from "react";
 import { useCustomers } from "./hook/useCustomers";
 import { CustomerModal } from "./components/CustomerModal";
@@ -81,13 +82,15 @@ export default function Customers() {
             </p>
           </div>
 
-          <button
+          <Button
+            type="button"
+            variant="ghost"
             onClick={() => setCustomerModal({ open: true, mode: "add" })}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-violet-500 hover:bg-violet-600 transition-colors text-xs font-medium shadow-lg shadow-violet-500/20"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-violet-500 hover:bg-violet-600 transition-colors text-xs font-medium shadow-lg shadow-violet-500/20 text-white h-auto"
           >
             <Plus size={13} />
             Add Customer
-          </button>
+          </Button>
         </div>
 
         <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">

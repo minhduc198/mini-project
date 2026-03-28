@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { TextFieldInput } from "@/src/components/TextFieldInput";
+import { Button } from "@/src/components/ui/button";
 import { register } from "../api/services";
 import { RegisterFormValues, registerSchema } from "../schemas";
 import { useMutation } from "@tanstack/react-query";
@@ -85,14 +86,15 @@ export function RegisterForm() {
             type={showPassword ? "text" : "password"}
             placeholder="At least 6 characters"
             rightElement={
-              <button
+              <Button
                 type="button"
+                variant="ghost"
                 onClick={() => setShowPassword((v) => !v)}
-                className="text-white/30 hover:text-white/60 transition-colors"
+                className="text-white/30 hover:text-white/60 transition-colors h-auto p-0 px-0 hover:bg-transparent"
                 tabIndex={-1}
               >
                 {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
-              </button>
+              </Button>
             }
           />
 
@@ -102,22 +104,24 @@ export function RegisterForm() {
             type={showConfirm ? "text" : "password"}
             placeholder="Repeat your password"
             rightElement={
-              <button
+              <Button
                 type="button"
+                variant="ghost"
                 onClick={() => setShowConfirm((v) => !v)}
-                className="text-white/30 hover:text-white/60 transition-colors"
+                className="text-white/30 hover:text-white/60 transition-colors h-auto p-0 px-0 hover:bg-transparent"
                 tabIndex={-1}
               >
                 {showConfirm ? <EyeOff size={15} /> : <Eye size={15} />}
-              </button>
+              </Button>
             }
           />
 
-          <button
+          <Button
             id="register-submit-btn"
             type="submit"
+            variant="ghost"
             disabled={isLoading}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-violet-500 hover:bg-violet-600 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium shadow-lg shadow-violet-500/25 transition-all duration-200 mt-2"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-violet-500 hover:bg-violet-600 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium shadow-lg shadow-violet-500/25 transition-all duration-200 mt-2 text-white"
           >
             {isLoading ? (
               <Loader2 size={15} className="animate-spin" />
@@ -125,7 +129,7 @@ export function RegisterForm() {
               <UserPlus size={15} />
             )}
             {isLoading ? "Creating account..." : "Create account"}
-          </button>
+          </Button>
         </form>
       </FormProvider>
 

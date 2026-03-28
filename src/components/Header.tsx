@@ -29,6 +29,7 @@ import {
 } from "./ui/dropdown-menu";
 import { Input } from "./ui/input";
 import { useSidebar } from "./ui/sidebar";
+import { Button } from "./ui/button";
 
 export default function Header() {
   const { isPinned, isHovering, setIsPinned } = useSidebarControl();
@@ -89,18 +90,20 @@ export default function Header() {
     >
       <div className="w-full flex items-center justify-between xl:justify-start gap-3 px-4 h-16 ">
         {isMobile && openMobile ? (
-          <button>
+          <Button type="button" variant="ghost" className="h-auto p-0 hover:bg-transparent">
             <X size={24} className="ml-2" />
-          </button>
+          </Button>
         ) : (
-          <button
+          <Button
+            type="button"
+            variant="ghost"
             onClick={toggleSidebar}
             className="h-9 w-9 rounded-lg border border-white/[0.08] bg-white/[0.04] flex flex-col gap-[5px] items-center justify-center text-white/50 hover:text-white hover:bg-white/[0.07] transition-all"
           >
             <span className="h-[1.5px] w-4 bg-current rounded block" />
             <span className="h-[1.5px] w-3 bg-current rounded block" />
             <span className="h-[1.5px] w-4 bg-current rounded block" />
-          </button>
+          </Button>
         )}
 
         <div className="relative w-95 hidden xl:flex">
@@ -133,12 +136,14 @@ export default function Header() {
           </span>
         </div>
 
-        <button
+        <Button
+          type="button"
+          variant="ghost"
           className="flex xl:hidden h-9 w-9 rounded-lg border border-white/[0.08] bg-white/[0.04] items-center justify-center text-white/50 hover:text-white transition-colors"
           onClick={() => setOpenMenu(!openMenu)}
         >
           <Ellipsis size={16} />
-        </button>
+        </Button>
       </div>
 
       <div
@@ -157,7 +162,11 @@ export default function Header() {
         {mounted && (
           <DropdownMenu open={isOpenProfile} onOpenChange={setIsOpenProfile}>
             <DropdownMenuTrigger asChild>
-              <button className="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-white/[0.04] transition-colors outline-none focus:outline-none">
+              <Button
+                type="button"
+                variant="ghost"
+                className="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-white/[0.04] transition-colors outline-none focus:outline-none h-auto"
+              >
                 <Avatar className="h-8 w-8">
                   <AvatarImage src="" />
                   <AvatarFallback className="bg-gradient-to-br from-violet-500 to-indigo-600 text-white text-xs font-semibold">
@@ -177,7 +186,7 @@ export default function Header() {
                 ) : (
                   <ChevronDown size={13} className="text-white/30" />
                 )}
-              </button>
+              </Button>
             </DropdownMenuTrigger>
 
             <DropdownMenuContent

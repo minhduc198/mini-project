@@ -280,12 +280,14 @@ export function OrderTable({
             className="w-full bg-white/4 border border-white/[0.07] rounded-lg pl-8 pr-8 py-2 text-xs placeholder-white/20 focus:outline-none focus:border-violet-500/50 focus:bg-white/6 transition-colors"
           />
           {filter.q && (
-            <button
+            <Button
+              type="button"
+              variant="ghost"
               onClick={() => updateFilter({ q: undefined })}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/20 hover:text-white/50"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/20 hover:text-white/50 h-auto p-0.5 hover:bg-transparent"
             >
               <X size={12} />
-            </button>
+            </Button>
           )}
         </div>
         <div className="flex items-center gap-2 mr-auto xl:ml-auto xl:mr-0">
@@ -413,12 +415,14 @@ export function OrderTable({
                 </Button>
               </div>
             ) : (
-              <button
+              <Button
+                type="button"
+                variant="ghost"
                 onClick={() => setShowDeleteConfirm(true)}
-                className="flex items-center gap-1.5 text-[11px] px-3 py-1.5 rounded-md bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 hover:border-red-500/40 transition-colors"
+                className="flex items-center gap-1.5 text-[11px] px-3 py-1.5 rounded-md bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 hover:border-red-500/40 transition-colors h-auto"
               >
                 <Trash2 size={12} /> Delete
-              </button>
+              </Button>
             )}
           </div>
         </div>
