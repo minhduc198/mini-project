@@ -1,8 +1,8 @@
-import ClientLayout from "@/src/components/ClientLayout";
-import "./globals.css";
 import { Toaster } from "react-hot-toast";
+import "./globals.css";
 
 import { Inter, JetBrains_Mono } from "next/font/google";
+import ReactQueryProvider from "../components/ReactQueryProvider";
 
 const fontSans = Inter({
   subsets: ["latin", "vietnamese"],
@@ -22,8 +22,10 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <body className={`${fontSans.variable} ${fontMono.variable} antialiased`}>
-        <ClientLayout>{children}</ClientLayout>
-        <Toaster position="top-right" />
+        <ReactQueryProvider>
+       {children}
+        <Toaster position="top-right" /> 
+        </ReactQueryProvider>
       </body>
     </html>
   );

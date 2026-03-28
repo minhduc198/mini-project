@@ -18,6 +18,7 @@ import {
   Zap,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
   DropdownMenu,
@@ -37,6 +38,13 @@ export default function Header() {
   const inputRef = useRef<HTMLInputElement>(null);
   const { isMobile, openMobile, setOpenMobile } = useSidebar();
   const [mounted, setMounted] = useState(false);
+  const router = useRouter();
+
+  const handleSignOut = () => {
+    localStorage.removeItem("access_token");
+    document.cookie = "access_token=; path=/; max-age=0; SameSite=Lax";
+    router.push("/login");
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -203,7 +211,10 @@ export default function Header() {
 
               <DropdownMenuSeparator className="bg-white/[0.06] my-1" />
 
-              <DropdownMenuItem className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer text-sm text-rose-400/70 hover:text-rose-400 focus:bg-rose-500/[0.06] focus:text-rose-400">
+              <DropdownMenuItem
+                onClick={handleSignOut}
+                className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer text-sm text-rose-400/70 hover:text-rose-400 focus:bg-rose-500/[0.06] focus:text-rose-400"
+              >
                 <LogOut size={15} className="shrink-0" />
                 Sign out
               </DropdownMenuItem>
