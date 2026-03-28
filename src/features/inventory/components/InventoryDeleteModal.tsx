@@ -7,6 +7,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/src/components/ui/dialog";
+import { Button } from "@/src/components/ui/button";
 import { Loader2, Trash2 } from "lucide-react";
 
 interface Props {
@@ -50,17 +51,21 @@ export function InventoryDeleteModal({
         </DialogHeader>
 
         <div className="flex items-center justify-end gap-2.5 px-6 py-4">
-          <button
+          <Button
+            type="button"
+            variant="ghost"
             onClick={onClose}
-            className="px-4 py-2 rounded-lg text-xs font-medium text-white/40 hover:text-white/70 border border-white/[0.07] hover:border-white/20 hover:bg-white/4 transition"
+            className="px-4 py-2 rounded-lg text-xs font-medium text-white/40 hover:text-white/70 border border-white/[0.07] hover:border-white/20 hover:bg-white/4 transition h-auto"
           >
             Cancel
-          </button>
+          </Button>
 
-          <button
+          <Button
+            type="button"
+            variant="ghost"
             onClick={onConfirm}
             disabled={isLoading}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-rose-500 hover:bg-rose-600 text-xs font-medium shadow-lg shadow-rose-500/20 disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-rose-500 hover:bg-rose-600 text-xs font-medium shadow-lg shadow-rose-500/20 disabled:opacity-50 text-white h-auto"
           >
             {isLoading ? (
               <Loader2 size={13} className="animate-spin" />
@@ -68,7 +73,7 @@ export function InventoryDeleteModal({
               <Trash2 size={13} />
             )}
             Delete
-          </button>
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

@@ -329,17 +329,19 @@ export function OrderModal(props: Props) {
             </div>
 
             <div className="flex items-center justify-end gap-2.5 px-6 py-4 border-t border-white/[0.07] shrink-0">
-              <button
+              <Button
                 type="button"
+                variant="ghost"
                 onClick={handleClose}
-                className="px-4 py-2 rounded-lg text-xs font-medium text-white/40 hover:text-white/70 border border-white/[0.07] hover:border-white/20 hover:bg-white/4 transition-colors"
+                className="px-4 py-2 rounded-lg text-xs font-medium text-white/40 hover:text-white/70 border border-white/[0.07] hover:border-white/20 hover:bg-white/4 transition-colors h-auto"
               >
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
                 type="submit"
+                variant="ghost"
                 disabled={!isDirty || isSubmitting}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-500 hover:bg-violet-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-xs font-medium shadow-lg shadow-violet-500/20"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-500 hover:bg-violet-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-xs font-medium shadow-lg shadow-violet-500/20 text-white h-auto"
               >
                 {isSubmitting ? (
                   <Loader2 size={13} className="animate-spin" />
@@ -349,7 +351,7 @@ export function OrderModal(props: Props) {
                   <ShoppingCart size={13} />
                 )}
                 {isEdit ? "Save Changes" : "Create Order"}
-              </button>
+              </Button>
             </div>
           </form>
         </FormProvider>

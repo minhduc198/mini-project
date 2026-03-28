@@ -5,6 +5,7 @@ import { useSidebarControl } from "@/src/hooks/use-sidebar-control";
 import { cn } from "@/lib/utils";
 import { Box, House, Package, Users, Zap } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
+import { Button } from "./ui/button";
 import {
   Sidebar,
   SidebarContent,
@@ -97,13 +98,15 @@ export function AppSidebar() {
           {sidebarItems.map((item) => {
             const active = isActive(item.url);
             return (
-              <button
+              <Button
                 key={item.key}
+                type="button"
+                variant="ghost"
                 onClick={() => handleGoToPage(item.url)}
                 className={cn(
-                  "w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-150",
+                  "w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-150 h-auto font-normal justify-start",
                   active
-                    ? "bg-violet-500/15 text-white"
+                    ? "bg-violet-500/15 text-white hover:bg-violet-500/15 hover:text-white"
                     : "text-white/40 hover:text-white/70 hover:bg-white/[0.04]",
                   { "justify-center px-2": !isMobile && !isExpanded },
                 )}
@@ -122,7 +125,7 @@ export function AppSidebar() {
                 {active && (isMobile || isExpanded) && (
                   <div className="ml-auto w-1 h-4 rounded-full bg-violet-400" />
                 )}
-              </button>
+              </Button>
             );
           })}
         </div>

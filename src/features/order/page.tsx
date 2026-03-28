@@ -11,6 +11,7 @@ import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from "@/src/constants";
 import { Product } from "@/src/features/product/types";
 import { SORT } from "@/src/types";
 import { CheckCircle, Plus, ShoppingCart, XCircle } from "lucide-react";
+import { Button } from "@/src/components/ui/button";
 import { useState } from "react";
 import { useCustomers } from "../customer/hook/useCustomers";
 import { useProducts } from "../product/hook/useProducts";
@@ -76,13 +77,15 @@ export default function Orders() {
               {allOrders.length} total orders
             </p>
           </div>
-          <button
+          <Button
+            type="button"
+            variant="ghost"
             onClick={() => setModalState({ open: true, mode: "add" })}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-violet-500 hover:bg-violet-600 transition-colors text-xs font-medium shadow-lg shadow-violet-500/20"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-violet-500 hover:bg-violet-600 transition-colors text-xs font-medium shadow-lg shadow-violet-500/20 text-white h-auto"
           >
             <Plus size={13} />
             Create Order
-          </button>
+          </Button>
         </div>
 
         <div className="grid grid-cols-2 xl:grid-cols-3 gap-4">

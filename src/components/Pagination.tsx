@@ -1,3 +1,4 @@
+import { Button } from "@/src/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface PaginationProps {
@@ -37,13 +38,15 @@ export function Pagination({
       </p>
 
       <div className="flex items-center gap-1">
-        <button
+        <Button
+          type="button"
+          variant="ghost"
           onClick={() => onPageChange(Math.max(1, page - 1))}
           disabled={page === 1}
-          className="p-1.5 rounded-md text-white/20 hover:text-white/60 hover:bg-white/[0.06] disabled:opacity-30 disabled:pointer-events-none transition-colors"
+          className="p-1.5 rounded-md text-white/20 hover:text-white/60 hover:bg-white/[0.06] disabled:opacity-30 disabled:pointer-events-none transition-colors h-auto"
         >
           <ChevronLeft size={14} />
-        </button>
+        </Button>
 
         {pageNumbers.map((n, i) =>
           n === "…" ? (
@@ -51,27 +54,31 @@ export function Pagination({
               …
             </span>
           ) : (
-            <button
+            <Button
               key={n}
+              type="button"
+              variant="ghost"
               onClick={() => onPageChange(n as number)}
-              className={`w-7 h-7 rounded-md text-[11px] transition-colors ${
+              className={`w-7 h-7 rounded-md text-[11px] transition-colors min-h-7 p-0 ${
                 page === n
-                  ? "bg-violet-500/20 text-violet-300 border border-violet-500/30"
+                  ? "bg-violet-500/20 text-violet-300 border border-violet-500/30 hover:bg-violet-500/20 hover:text-violet-300"
                   : "text-white/30 hover:text-white/60 hover:bg-white/[0.06]"
               }`}
             >
               {n}
-            </button>
+            </Button>
           ),
         )}
 
-        <button
+        <Button
+          type="button"
+          variant="ghost"
           onClick={() => onPageChange(Math.min(totalPages, page + 1))}
           disabled={page === totalPages}
-          className="p-1.5 rounded-md text-white/20 hover:text-white/60 hover:bg-white/[0.06] disabled:opacity-30 disabled:pointer-events-none transition-colors"
+          className="p-1.5 rounded-md text-white/20 hover:text-white/60 hover:bg-white/[0.06] disabled:opacity-30 disabled:pointer-events-none transition-colors h-auto"
         >
           <ChevronRight size={14} />
-        </button>
+        </Button>
       </div>
     </div>
   );

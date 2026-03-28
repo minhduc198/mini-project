@@ -1,15 +1,16 @@
 "use client";
 
 import { TextFieldInput } from "@/src/components/TextFieldInput";
+import { Button } from "@/src/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff, Loader2, LogIn, Zap } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import { login } from "../api/services";
 import { LoginFormValues, loginSchema } from "../schemas";
+import { toast } from "@/lib/toast";
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -89,22 +90,24 @@ export function LoginForm() {
             type={showPassword ? "text" : "password"}
             placeholder="••••••••"
             rightElement={
-              <button
+              <Button
                 type="button"
+                variant="ghost"
                 onClick={() => setShowPassword((v) => !v)}
-                className="text-white/30 hover:text-white/60 transition-colors"
+                className="text-white/30 hover:text-white/60 transition-colors h-auto p-0 px-0 hover:bg-transparent"
                 tabIndex={-1}
               >
                 {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
-              </button>
+              </Button>
             }
           />
 
-          <button
+          <Button
             id="login-submit-btn"
             type="submit"
+            variant="ghost"
             disabled={isLoading}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-violet-500 hover:bg-violet-600 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium shadow-lg shadow-violet-500/25 transition-all duration-200 mt-2"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-violet-500 hover:bg-violet-600 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium shadow-lg shadow-violet-500/25 transition-all duration-200 mt-2 text-white"
           >
             {isLoading ? (
               <Loader2 size={15} className="animate-spin" />
@@ -112,12 +115,12 @@ export function LoginForm() {
               <LogIn size={15} />
             )}
             {isLoading ? "Signing in..." : "Sign in"}
-          </button>
+          </Button>
         </form>
       </FormProvider>
 
       <p className="mt-6 text-center text-sm text-white/30">
-        Don&apos;t have an account?{" "}
+        Do not have an account?{" "}
         <Link
           href="/register"
           className="text-violet-400 hover:text-violet-300 font-medium transition-colors"

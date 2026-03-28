@@ -8,6 +8,7 @@ import { ProductStats } from "@/src/features/product/components/ProductStats";
 import { ProductTable } from "@/src/features/product/components/ProductTable";
 import { GetProductListRequest, Product } from "@/src/features/product/types";
 import { SORT } from "@/src/types";
+import { Button } from "@/src/components/ui/button";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { useInventories } from "../inventory/hook/useInventories";
@@ -94,13 +95,15 @@ export default function Products() {
               {allProducts.length} total products
             </p>
           </div>
-          <button
+          <Button
+            type="button"
+            variant="ghost"
             onClick={() => setProductModal({ open: true, mode: "add" })}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-violet-500 hover:bg-violet-600 transition-colors text-xs font-medium shadow-lg shadow-violet-500/20"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-violet-500 hover:bg-violet-600 transition-colors text-xs font-medium shadow-lg shadow-violet-500/20 text-white h-auto"
           >
             <Plus size={13} />
             Add Product
-          </button>
+          </Button>
         </div>
 
         <ProductStats products={allProducts} inventories={inventories} />

@@ -136,17 +136,19 @@ export default function Dashboard() {
               </div>
               <div className="flex items-center gap-1">
                 {["1M", "3M", "6M", "1Y"].map((t) => (
-                  <button
+                  <Button
                     key={t}
+                    type="button"
+                    variant="ghost"
                     onClick={() => setActiveRange(t)}
-                    className={`text-xs px-2.5 py-1 rounded-md transition-colors ${
+                    className={`text-xs px-2.5 py-1 rounded-md transition-colors h-auto ${
                       activeRange === t
-                        ? "bg-violet-500/20 text-violet-300"
+                        ? "bg-violet-500/20 text-violet-300 hover:bg-violet-500/20 hover:text-violet-300"
                         : "text-white/30 hover:text-white/60"
                     }`}
                   >
                     {t}
-                  </button>
+                  </Button>
                 ))}
               </div>
             </div>
