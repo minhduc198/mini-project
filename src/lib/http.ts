@@ -1,14 +1,13 @@
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosInstance } from 'axios';
+import { env } from '../config/env';
 
 class Http {
   instance: AxiosInstance;
 
   constructor() {
     this.instance = axios.create({
-      baseURL:
-        typeof window !== "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "",
+      baseURL: env.BASE_URL,
     });
-
   }
 }
 

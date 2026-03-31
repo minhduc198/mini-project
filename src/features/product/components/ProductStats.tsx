@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { formatShortNumber } from "@/lib/utils";
-import { StatCard } from "@/src/features/customer/components/StatCard";
-import { Product } from "@/src/features/product/types";
-import { Package, TrendingUp, AlertTriangle, ShoppingBag } from "lucide-react";
-import { Inventory } from "../../inventory/types";
+import { formatShortNumber } from '@/src/lib/utils';
+import { StatCard } from '@/src/features/customer/components/StatCard';
+import { Product } from '@/src/features/product/types';
+import { Package, TrendingUp, AlertTriangle, ShoppingBag } from 'lucide-react';
+import { Inventory } from '../../inventory/types';
 
 interface Props {
   products: Product[];
@@ -15,7 +15,7 @@ export function ProductStats({ products, inventories }: Props) {
   const totalProducts = products.length;
   const totalSales = products.reduce((s, p) => s + (p.sales ?? 0), 0);
   const totalStock = inventories.reduce((s, p) => s + (p.stock ?? 0), 0);
-  const lowStockCount = inventories.filter((p) => (p.stock ?? 0) < 10).length;
+  const lowStockCount = inventories.filter(p => (p.stock ?? 0) < 10).length;
 
   return (
     <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">

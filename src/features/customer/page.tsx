@@ -1,50 +1,29 @@
-"use client";
+'use client';
 
-import { formatShortNumber } from "@/lib/utils";
-import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from "@/src/constants";
-import { CustomerTable } from "@/src/features/customer/components/CustomerTable";
-import { StatCard } from "@/src/features/customer/components/StatCard";
-import {
-  CreateCustomerRequest,
-  Customer,
-  GetCustomersListRequest,
-} from "@/src/features/customer/types";
-import { SORT } from "@/src/types";
-import {
-  Plus,
-  ShoppingBag,
-  ShoppingCart,
-  TrendingUp,
-  Users,
-} from "lucide-react";
-import { Button } from "@/src/components/ui/button";
-import { useState } from "react";
-import { useCustomers } from "./hook/useCustomers";
-import { CustomerModal } from "./components/CustomerModal";
+import { formatShortNumber } from '@/src/lib/utils';
+import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from '@/src/constants';
+import { CustomerTable } from '@/src/features/customer/components/CustomerTable';
+import { StatCard } from '@/src/features/customer/components/StatCard';
+import { CreateCustomerRequest, Customer, GetCustomersListRequest } from '@/src/features/customer/types';
+import { SORT } from '@/src/types';
+import { Plus, ShoppingBag, ShoppingCart, TrendingUp, Users } from 'lucide-react';
+import { Button } from '@/src/components/ui/button';
+import { useState } from 'react';
+import { useCustomers } from './hook/useCustomers';
+import { CustomerModal } from './components/CustomerModal';
 
 export default function Customers() {
   const [customerModal, setCustomerModal] = useState<
-    | { open: false }
-    | { open: true; mode: "add" }
-    | { open: true; mode: "edit"; customer: Customer }
+    { open: false } | { open: true; mode: 'add' } | { open: true; mode: 'edit'; customer: Customer }
   >({ open: false });
 
-  const [customerListRq, setCustomerListRq] = useState<GetCustomersListRequest>(
-    {
-      filter: {},
-      sort: { field: "total_spent", order: SORT.DESC },
-      pagination: { page: DEFAULT_PAGE, perPage: DEFAULT_PER_PAGE },
-    },
-  );
+  const [customerListRq, setCustomerListRq] = useState<GetCustomersListRequest>({
+    filter: {},
+    sort: { field: 'total_spent', order: SORT.DESC },
+    pagination: { page: DEFAULT_PAGE, perPage: DEFAULT_PER_PAGE },
+  });
 
-  const {
-    listQueryCustomer,
-    statsQueryCustomer,
-    deleteCustomers,
-    createCustomer,
-    updateCustomer,
-    isCreating,
-  } = useCustomers(customerListRq);
+  const { listQueryCustomer, statsQueryCustomer, deleteCustomers, createCustomer, updateCustomer, isCreating } = useCustomers(customerListRq);
 
   const { data: customerListData, isLoading } = listQueryCustomer;
   const { data: statsData } = statsQueryCustomer;
@@ -52,19 +31,14 @@ export default function Customers() {
   const allCustomers = (statsData?.data as Customer[]) ?? [];
   const totalCustomers = allCustomers.length;
 
-  const totalRevenue = allCustomers.reduce(
-    (s, c) => s + (c.total_spent ?? 0),
-    0,
-  );
+  const totalRevenue = allCustomers.reduce((s, c) => s + (c.total_spent ?? 0), 0);
 
   const totalOrders = allCustomers.reduce((s, c) => s + (c.nb_orders ?? 0), 0);
 
-  const avgSpend = totalCustomers
-    ? Math.floor(totalRevenue / totalCustomers)
-    : 0;
+  const avgSpend = totalCustomers ? Math.floor(totalRevenue / totalCustomers) : 0;
 
-  const orderedCount = allCustomers.filter((c) => c.has_ordered).length;
-  const newsletterCount = allCustomers.filter((c) => c.has_newsletter).length;
+  const orderedCount = allCustomers.filter(c => c.has_ordered).length;
+  const newsletterCount = allCustomers.filter(c => c.has_newsletter).length;
 
   const pageData = (customerListData?.data as Customer[]) ?? [];
   const totalFiltered = customerListData?.total ?? 0;
@@ -77,17 +51,14 @@ export default function Customers() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-lg font-semibold tracking-tight">Customers</h1>
-            <p className="text-xs text-white/30 mt-0.5">
-              {isLoading ? "Loading…" : `${totalCustomers} total customers`}
-            </p>
+            <p className="text-xs text-white/30 mt-0.5">{isLoading ? 'Loading…' : `${totalCustomers} total customers`}</p>
           </div>
 
           <Button
             type="button"
             variant="ghost"
-            onClick={() => setCustomerModal({ open: true, mode: "add" })}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-violet-500 hover:bg-violet-600 transition-colors text-xs font-medium shadow-lg shadow-violet-500/20 text-white h-auto"
-          >
+            onClick={() => setCustomerModal({ open: true, mode: 'add' })}
+            className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-violet-500 hover:bg-violet-600 transition-colors text-xs font-medium shadow-lg shadow-violet-500/20 text-white h-auto">
             <Plus size={13} />
             Add Customer
           </Button>
@@ -131,17 +102,17 @@ export default function Customers() {
           request={customerListRq}
           onRequestChange={setCustomerListRq}
           onDelete={deleteCustomers}
-          onEdit={(customer) =>
+          onEdit={customer =>
             setCustomerModal({
               open: true,
-              mode: "edit",
+              mode: 'edit',
               customer,
             })
           }
         />
       </div>
 
-      {customerModal.open && customerModal.mode === "add" && (
+      {customerModal.open && customerModal.mode === 'add' && (
         <CustomerModal
           mode="add"
           open
@@ -151,7 +122,7 @@ export default function Customers() {
         />
       )}
 
-      {customerModal.open && customerModal.mode === "edit" && (
+      {customerModal.open && customerModal.mode === 'edit' && (
         <CustomerModal
           mode="edit"
           open

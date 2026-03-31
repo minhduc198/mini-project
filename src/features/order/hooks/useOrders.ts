@@ -1,20 +1,11 @@
-"use client";
+'use client';
 
-import { toast } from "@/lib/toast";
-import { queryClient } from "@/src/components/ClientLayout";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import {
-  createOrder,
-  deleteOrders,
-  fetchOrdersList,
-  updateOrderDirect,
-} from "../api/services";
-import {
-  CreateOrderRequest,
-  GetOrdersListRequest,
-  UpdateOrderRequest,
-} from "../types";
-import { orderKeys } from "../query-key/order.query-key";
+import { toast } from '@/src/lib/toast';
+import { queryClient } from '@/src/components/ClientLayout';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { createOrder, deleteOrders, fetchOrdersList, updateOrderDirect } from '../api/services';
+import { CreateOrderRequest, GetOrdersListRequest, UpdateOrderRequest } from '../types';
+import { orderKeys } from '../query-key/order.query-key';
 
 export function useOrders(request: GetOrdersListRequest) {
   const statsQueryOrder = useQuery({
@@ -32,33 +23,33 @@ export function useOrders(request: GetOrdersListRequest) {
   const { mutate: createOrderMutation, isPending: isCreating } = useMutation({
     mutationFn: (data: CreateOrderRequest) => createOrder(data),
     onSuccess: () => {
-      toast.success("Order created successfully");
+      toast.success('Order created successfully');
       queryClient.invalidateQueries({ queryKey: orderKeys.all });
     },
     onError: (err: Error) => {
-      toast.error(err.message || "Failed to create order");
+      toast.error(err.message || 'Failed to create order');
     },
   });
 
   const { mutate: updateOrderMutation, isPending: isUpdating } = useMutation({
     mutationFn: (data: UpdateOrderRequest) => updateOrderDirect(data),
     onSuccess: () => {
-      toast.success("Order updated successfully");
+      toast.success('Order updated successfully');
       queryClient.invalidateQueries({ queryKey: orderKeys.all });
     },
     onError: (err: Error) => {
-      toast.error(err.message || "Failed to update order");
+      toast.error(err.message || 'Failed to update order');
     },
   });
 
   const { mutate: deleteOrdersMutation } = useMutation({
     mutationFn: (ids: number[]) => deleteOrders(ids),
     onSuccess: () => {
-      toast.success("Orders deleted");
+      toast.success('Orders deleted');
       queryClient.invalidateQueries({ queryKey: orderKeys.all });
     },
     onError: (err: Error) => {
-      toast.error(err.message || "Failed to delete orders");
+      toast.error(err.message || 'Failed to delete orders');
     },
   });
 

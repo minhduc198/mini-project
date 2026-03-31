@@ -1,17 +1,10 @@
-const requiredEnv = ["NEXT_PUBLIC_BASE_URL"] as const;
+const NEXT_PUBLIC_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-type EnvKey = (typeof requiredEnv)[number];
-
-function getEnv(key: EnvKey): string {
-  const value = process.env[key];
-
-  if (!value) {
-    throw new Error(`Missing environment variable: ${key}`);
-  }
-
-  return value;
+if (!NEXT_PUBLIC_BASE_URL) {
+  const errorMsg = '[Environment Error] Missing required environment variable: NEXT_PUBLIC_BASE_URL';
+  throw new Error(errorMsg);
 }
 
 export const env = {
-  BASE_URL: getEnv("NEXT_PUBLIC_BASE_URL"),
-};
+  BASE_URL: NEXT_PUBLIC_BASE_URL,
+} as const;

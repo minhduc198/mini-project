@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/src/lib/utils';
 import { Checkbox as CheckboxUI } from '@/src/components/ui/checkbox';
 import type { MouseEvent } from 'react';
 
