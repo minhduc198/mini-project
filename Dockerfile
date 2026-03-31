@@ -43,7 +43,7 @@
  # COPY --from=builder /app/.next/static ./.next/static
  
  USER nextjs
- EXPOSE 3000
+ EXPOSE 4000
  
  CMD ["npm", "run", "start"]
  
