@@ -2,10 +2,10 @@
 
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { createCustomer, deleteCustomers, fetchCustomersList, updateCustomer } from '../api/services';
-import { queryClient } from '@/src/components/ClientLayout';
 import { toast } from '@/src/lib/toast';
 import { CreateCustomerRequest, GetCustomersListRequest, UpdateCustomerRequest } from '../types';
 import { customerKeys } from '../query-key/customer.query-key';
+import { queryClient } from '@/src/components/ReactQueryProvider';
 
 export function useCustomers(request: GetCustomersListRequest) {
   const statsQueryCustomer = useQuery({

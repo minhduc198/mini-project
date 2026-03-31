@@ -1,11 +1,11 @@
 'use client';
 
 import { toast } from '@/src/lib/toast';
-import { queryClient } from '@/src/components/ClientLayout';
 import { createProduct, deleteProducts, fetchProductsList, updateProduct } from '@/src/features/product/api/services';
 import { CreateProductRequest, GetProductListRequest, UpdateProductRequest } from '@/src/features/product/types';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { productKeys } from '../query-key/product.query-key';
+import { queryClient } from '@/src/components/ReactQueryProvider';
 
 export function useProducts(request: GetProductListRequest) {
   const statsQueryProduct = useQuery({

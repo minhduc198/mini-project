@@ -1,11 +1,11 @@
 'use client';
 
 import { toast } from '@/src/lib/toast';
-import { queryClient } from '@/src/components/ClientLayout';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { createOrder, deleteOrders, fetchOrdersList, updateOrderDirect } from '../api/services';
 import { CreateOrderRequest, GetOrdersListRequest, UpdateOrderRequest } from '../types';
 import { orderKeys } from '../query-key/order.query-key';
+import { queryClient } from '@/src/components/ReactQueryProvider';
 
 export function useOrders(request: GetOrdersListRequest) {
   const statsQueryOrder = useQuery({
