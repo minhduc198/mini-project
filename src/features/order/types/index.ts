@@ -40,11 +40,11 @@ export interface GetOrdersListRequest {
   filter?: {
     status?: OrderStatus;
     customer_id?: number;
-    date_gte?: string;
-    date_lte?: string;
+    date_from?: string;
+    date_to?: string;
     total_gte?: number;
     total_lte?: number;
-    q?: string;
+    reference?: string;
   };
 }
 

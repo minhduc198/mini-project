@@ -51,10 +51,10 @@ export function OrderTable({
   const perPage = request.pagination?.perPage ?? DEFAULT_PER_PAGE;
   const totalPages = Math.max(1, Math.ceil(total / perPage));
   const hasActiveFilter = !!(
-    filter.q ||
+    filter.reference ||
     filter.status ||
-    filter.date_gte ||
-    filter.date_lte
+    filter.date_from ||
+    filter.date_to
   );
 
   const updateFilter = (patch: Partial<GetOrdersListRequest["filter"]>) => {
@@ -274,16 +274,18 @@ export function OrderTable({
             className="absolute left-3 top-1/2 -translate-y-1/2 text-white/25"
           />
           <Input
-            value={filter.q ?? ""}
-            onChange={(e) => updateFilter({ q: e.target.value || undefined })}
+            value={filter.reference ?? ""}
+            onChange={(e) =>
+              updateFilter({ reference: e.target.value || undefined })
+            }
             placeholder="Search reference…"
             className="w-full bg-white/4 border border-white/[0.07] rounded-lg pl-8 pr-8 py-2 text-xs placeholder-white/20 focus:outline-none focus:border-violet-500/50 focus:bg-white/6 transition-colors"
           />
-          {filter.q && (
+          {filter.reference && (
             <Button
               type="button"
               variant="ghost"
-              onClick={() => updateFilter({ q: undefined })}
+              onClick={() => updateFilter({ reference: undefined })}
               className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/20 hover:text-white/50 h-auto p-0.5 hover:bg-transparent"
             >
               <X size={12} />
@@ -342,8 +344,8 @@ export function OrderTable({
               From
             </span>
             <DatePicker
-              value={filter.date_gte}
-              onChange={(iso) => updateFilter({ date_gte: iso })}
+              value={filter.date_from}
+              onChange={(iso) => updateFilter({ date_from: iso })}
               placeholder="Start date"
               className="w-36"
             />
@@ -353,8 +355,8 @@ export function OrderTable({
               To
             </span>
             <DatePicker
-              value={filter.date_lte}
-              onChange={(iso) => updateFilter({ date_lte: iso })}
+              value={filter.date_to}
+              onChange={(iso) => updateFilter({ date_to: iso })}
               placeholder="End date"
               className="w-36"
             />
