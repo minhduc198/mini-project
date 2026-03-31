@@ -26,7 +26,7 @@
  WORKDIR /app
  
  ENV NODE_ENV=production
- ENV PORT=3000
+ ENV PORT=4000
  
  # Non-root user
  RUN addgroup -S nodejs && adduser -S nextjs -G nodejs
