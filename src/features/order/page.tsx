@@ -45,7 +45,9 @@ export default function Orders() {
     isUpdating,
   } = useOrders(orderListRq);
 
-  const { statsQueryCustomer } = useCustomers(orderListRq);
+  const { statsQueryCustomer } = useCustomers({
+    pagination: { page: 1, perPage: 9999 },
+  });
 
   const { statsQueryProduct } = useProducts({
     pagination: { page: 1, perPage: 9999 },
