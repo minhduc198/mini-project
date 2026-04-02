@@ -11,7 +11,6 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { inventoryKeys } from "../query-key/inventory.query-key";
 import { CreateInventoryRequest, UpdateInventoryRequest } from "../types";
-import { productKeys } from "../../product/query-key/product.query-key";
 
 export function useInventories() {
   const inventoriesQuery = useQuery({
@@ -24,9 +23,7 @@ export function useInventories() {
     mutationFn: (ids: number[]) => deleteInventory(ids),
     onSuccess: () => {
       toast.success("Inventory deleted successfully");
-      queryClient.invalidateQueries({
-        queryKey: [...inventoryKeys.all, ...productKeys.all],
-      });
+      queryClient.invalidateQueries({ queryKey: inventoryKeys.all });
     },
     onError: () => {
       toast.error("Inventory deleted unsuccessful");
