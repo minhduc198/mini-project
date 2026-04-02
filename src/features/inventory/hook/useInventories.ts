@@ -1,11 +1,17 @@
-'use client';
+"use client";
 
-import { createInventory, deleteInventory, fetchInventoriesList, updateInventory } from '@/src/features/inventory/api/services';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
-import { CreateInventoryRequest, UpdateInventoryRequest } from '../types';
-import { inventoryKeys } from '../query-key/inventory.query-key';
-import { queryClient } from '@/src/components/ReactQueryProvider';
+import {
+  createInventory,
+  deleteInventory,
+  fetchInventoriesList,
+  updateInventory,
+} from "@/src/features/inventory/api/services";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { CreateInventoryRequest, UpdateInventoryRequest } from "../types";
+import { inventoryKeys } from "../query-key/inventory.query-key";
+import { queryClient } from "@/src/components/ReactQueryProvider";
+import { productKeys } from "../../product/query-key/product.query-key";
 
 export function useInventories() {
   const inventoriesQuery = useQuery({
@@ -17,33 +23,35 @@ export function useInventories() {
   const deleteInventoryMutation = useMutation({
     mutationFn: (ids: number[]) => deleteInventory(ids),
     onSuccess: () => {
-      toast.success('Inventory deleted successfully');
-      queryClient.invalidateQueries({ queryKey: inventoryKeys.all });
+      toast.success("Inventory deleted successfully");
+      queryClient.invalidateQueries({
+        queryKey: [...inventoryKeys.all, productKeys.all],
+      });
     },
     onError: () => {
-      toast.error('Inventory deleted unsuccessful');
+      toast.error("Inventory deleted unsuccessful");
     },
   });
 
   const updateInventoryMutation = useMutation({
     mutationFn: (params: UpdateInventoryRequest) => updateInventory(params),
     onSuccess: () => {
-      toast.success('Inventory updated successfully');
+      toast.success("Inventory updated successfully");
       queryClient.invalidateQueries({ queryKey: inventoryKeys.all });
     },
     onError: () => {
-      toast.error('Updated inventory unsuccessful');
+      toast.error("Updated inventory unsuccessful");
     },
   });
 
   const createInventoryMutation = useMutation({
     mutationFn: (params: CreateInventoryRequest) => createInventory(params),
     onSuccess: () => {
-      toast.success('Inventory created successfully');
+      toast.success("Inventory created successfully");
       queryClient.invalidateQueries({ queryKey: inventoryKeys.all });
     },
     onError: () => {
-      toast.error('Create inventory unsuccessful');
+      toast.error("Create inventory unsuccessful");
     },
   });
 
