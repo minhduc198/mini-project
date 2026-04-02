@@ -28,10 +28,13 @@ export function ImageUploadField({
 
   const error = errors[name]?.message as string | undefined;
   const currentUrl = watch(name) as string | undefined;
-  const currentPath = pathName
+
+  const formPath = pathName
     ? (watch(pathName) as string | undefined)
     : undefined;
-
+  const [uploadedPath, setUploadedPath] = useState<string | undefined>(
+    formPath,
+  );
   const [isUploading, setIsUploading] = useState(false);
   const [preview, setPreview] = useState<string | undefined>(currentUrl);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -46,11 +49,14 @@ export function ImageUploadField({
 
     try {
       let result;
-      if (currentPath) {
-        result = await UploadService.updateImage(file, currentPath);
+
+      if (uploadedPath) {
+        result = await UploadService.updateImage(file, uploadedPath);
       } else {
         result = await UploadService.uploadImage(file);
       }
+
+      setUploadedPath(result.path);
 
       setValue(name, result.url, { shouldValidate: true, shouldDirty: true });
       if (pathName) {
@@ -67,14 +73,15 @@ export function ImageUploadField({
   };
 
   const handleRemove = async () => {
-    if (currentPath) {
+    if (uploadedPath) {
       try {
-        await UploadService.deleteImage(currentPath);
+        await UploadService.deleteImage(uploadedPath);
       } catch (err) {
         console.error("Xóa ảnh thất bại:", err);
       }
     }
 
+    setUploadedPath(undefined);
     setPreview(undefined);
     setValue(name, "", { shouldValidate: true, shouldDirty: true });
     if (pathName) setValue(pathName, "", { shouldDirty: true });
