@@ -25,7 +25,7 @@ import {
 } from "@/src/features/product/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, PackagePlus, Pencil } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { ImageUploadField } from "@/src/components/ImageUploadField";
 
@@ -66,6 +66,7 @@ const EMPTY_VALUES: ProductFormValues = {
 export function ProductModal(props: Props) {
   const { open, onClose, inventories, isSubmitting = false, mode } = props;
   const isEdit = mode === "edit";
+  const [isUploading, setIsUploading] = useState(false);
 
   const methods = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
@@ -101,6 +102,10 @@ export function ProductModal(props: Props) {
   const handleClose = () => {
     reset(EMPTY_VALUES);
     onClose();
+  };
+
+  const handleUploading = (uploading: boolean) => {
+    setIsUploading(uploading);
   };
 
   const onFormSubmit = (values: ProductFormValues) => {
@@ -209,6 +214,7 @@ export function ProductModal(props: Props) {
                     name="thumbnailUrl"
                     pathName="thumbnailPath"
                     label="Thumbnail"
+                    handleUploading={handleUploading}
                   />
                 </div>
 
@@ -217,6 +223,7 @@ export function ProductModal(props: Props) {
                     name="imageUrl"
                     pathName="imagePath"
                     label="Image"
+                    handleUploading={handleUploading}
                   />
                 </div>
 
@@ -243,7 +250,7 @@ export function ProductModal(props: Props) {
               <Button
                 type="submit"
                 variant="ghost"
-                disabled={!isDirty || isSubmitting}
+                disabled={!isDirty || isUploading || isSubmitting}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-500 hover:bg-violet-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-xs font-medium shadow-lg shadow-violet-500/20 text-white h-auto"
               >
                 {isSubmitting ? (

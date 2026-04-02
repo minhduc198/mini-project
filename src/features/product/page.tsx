@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/src/components/ui/button";
 import { DEFAULT_PAGE, DEFAULT_PER_PAGE } from "@/src/constants";
 import { InventoryGrid } from "@/src/features/inventory/components/InventoryGrid";
 import { InventoryModal } from "@/src/features/inventory/components/InventoryModal";
@@ -8,13 +9,12 @@ import { ProductStats } from "@/src/features/product/components/ProductStats";
 import { ProductTable } from "@/src/features/product/components/ProductTable";
 import { GetProductListRequest, Product } from "@/src/features/product/types";
 import { SORT } from "@/src/types";
-import { Button } from "@/src/components/ui/button";
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import { useInventories } from "../inventory/hook/useInventories";
-import { useProducts } from "./hook/useProducts";
-import { Inventory } from "../inventory/types";
 import { InventoryDeleteModal } from "../inventory/components/InventoryDeleteModal";
+import { useInventories } from "../inventory/hook/useInventories";
+import { Inventory } from "../inventory/types";
+import { useProducts } from "./hook/useProducts";
 
 export default function Products() {
   const [productModal, setProductModal] = useState<
@@ -36,6 +36,7 @@ export default function Products() {
     open: false,
     inventoryId: [],
   });
+  const [isUploading, setIsUploading] = useState(false);
 
   const [activeCategoryId, setActiveCategoryId] = useState<string | undefined>(
     undefined,

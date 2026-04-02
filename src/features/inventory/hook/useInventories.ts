@@ -25,7 +25,7 @@ export function useInventories() {
     onSuccess: () => {
       toast.success("Inventory deleted successfully");
       queryClient.invalidateQueries({
-        queryKey: [...inventoryKeys.all, productKeys.all],
+        queryKey: inventoryKeys.all,
       });
     },
     onError: () => {

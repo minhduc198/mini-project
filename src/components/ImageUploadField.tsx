@@ -10,12 +10,14 @@ interface ImageUploadFieldProps {
   name: string;
   pathName?: string;
   label: string;
+  handleUploading: (uploading: boolean) => void;
 }
 
 export function ImageUploadField({
   name,
   pathName,
   label,
+  handleUploading,
 }: ImageUploadFieldProps) {
   const {
     control,
@@ -40,6 +42,7 @@ export function ImageUploadField({
     const objectUrl = URL.createObjectURL(file);
     setPreview(objectUrl);
     setIsUploading(true);
+    handleUploading(true);
 
     try {
       let result;
@@ -58,6 +61,7 @@ export function ImageUploadField({
       console.error(err);
     } finally {
       setIsUploading(false);
+      handleUploading(false);
       URL.revokeObjectURL(objectUrl);
     }
   };
