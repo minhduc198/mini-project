@@ -76,7 +76,7 @@ export const FIELDS: {
     half: true,
   },
   {
-    name: "avatar",
+    name: "imageUrl",
     label: "Avatar URL",
     placeholder: "https://…",
     half: true,
