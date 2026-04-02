@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import Image from "next/image";
 
 export interface SearchableOption {
   value: number | string;
@@ -76,8 +77,11 @@ export function SearchableSelect({
         {selected ? (
           <>
             {selected.avatar && (
-              <img
+              <Image
+                width={20}
+                height={20}
                 src={selected.avatar}
+                alt={selected.label}
                 className="w-5 h-5 rounded-full object-cover shrink-0 ring-1 ring-white/10"
               />
             )}
@@ -117,7 +121,7 @@ export function SearchableSelect({
             </div>
           </div>
 
-          <div className="max-h-52 overflow-y-auto py-1 scrollbar-hide">
+          <div className="max-h-52 overflow-y-auto py-1 no-scrollbar">
             {filtered.length === 0 ? (
               <div className="px-3 py-4 text-center text-[11px] text-white/20">
                 No results
@@ -137,8 +141,11 @@ export function SearchableSelect({
                       ${isActive ? "bg-violet-500/10 text-violet-300" : "text-white/60 hover:bg-white/[0.04] hover:text-white/80"}`}
                   >
                     {opt.avatar && (
-                      <img
+                      <Image
+                        width={20}
+                        height={20}
                         src={opt.avatar}
+                        alt={opt.label}
                         className="w-6 h-6 rounded-full object-cover shrink-0 ring-1 ring-white/10"
                       />
                     )}

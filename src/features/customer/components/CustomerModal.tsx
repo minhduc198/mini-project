@@ -14,7 +14,6 @@ import { TextFieldArea } from "@/src/components/TextFieldArea";
 import { TextFieldInput } from "@/src/components/TextFieldInput";
 
 import { AddCustomerFormValues, addCustomerSchema } from "../schemas";
-
 import {
   CreateCustomerRequest,
   Customer,
@@ -30,6 +29,7 @@ import { DatePickerField } from "@/src/components/DatePickerField";
 import { SelectField } from "@/src/components/SelectField";
 import { Button } from "@/src/components/ui/button";
 import { GROUP_LABELS } from "../constants";
+import { ImageUploadField } from "@/src/components/ImageUploadField";
 
 type AddMode = {
   mode: "add";
@@ -56,7 +56,8 @@ const EMPTY_VALUES: AddCustomerFormValues = {
   last_name: "",
   email: "",
   address: "",
-  avatar: "",
+  imageUrl: "",
+  imagePath: "",
   city: "",
   zipcode: "",
   birthday: "",
@@ -88,7 +89,8 @@ export function CustomerModal(props: Props) {
         last_name: d.last_name ?? "",
         email: d.email ?? "",
         address: d.address ?? "",
-        avatar: d.avatar ?? "",
+        imageUrl: d.avatar ?? "",
+        imagePath: "",
         city: d.city ?? "",
         zipcode: d.zipcode ?? "",
         birthday: d.birthday ?? "",
@@ -107,18 +109,17 @@ export function CustomerModal(props: Props) {
   const onFormSubmit = (values: AddCustomerFormValues) => {
     const payload = {
       ...values,
+      avatar: values.imageUrl,
       groups: values.groups ? [values.groups] : [],
     };
 
+    delete (payload as any).imageUrl;
+    delete (payload as any).imagePath;
+
     if (isEdit) {
-      props.onSubmit({
-        id: props.customerId,
-        data: payload,
-      });
+      props.onSubmit({ id: props.customerId, data: payload });
     } else {
-      props.onSubmit({
-        data: payload,
-      });
+      props.onSubmit({ data: payload });
     }
 
     handleClose();
@@ -130,7 +131,7 @@ export function CustomerModal(props: Props) {
         className="
           w-full max-w-lg p-0 gap-0 border border-white/[0.08] bg-overlay
           rounded-2xl shadow-2xl shadow-black/60 overflow-hidden flex flex-col max-h-[90vh]
-          [&>button]:text-white/25 [&>button]:hover:text-white/60 [&>button]:hover:bg-white/6
+          [&>button]:text-white/25 [&>button]:hover:text-white/60 [&>button]:hover:bg-white/6 no-scrollbar
         "
       >
         <DialogHeader className="flex-row items-center gap-3 px-6 pt-5 pb-4 border-b border-white/[0.07] shrink-0 space-y-0">
@@ -177,10 +178,10 @@ export function CustomerModal(props: Props) {
                 <TextFieldInput name="zipcode" label="Zip Code" />
 
                 <div className="col-span-2">
-                  <TextFieldInput
-                    name="avatar"
-                    label="Avatar URL"
-                    placeholder="https://..."
+                  <ImageUploadField
+                    name="imageUrl"
+                    pathName="imagePath"
+                    label="Avatar Max: 5 MB"
                   />
                 </div>
 
@@ -235,7 +236,6 @@ export function CustomerModal(props: Props) {
                 ) : (
                   <UserPlus size={13} />
                 )}
-
                 {isEdit ? "Save Changes" : "Add Customer"}
               </Button>
             </div>

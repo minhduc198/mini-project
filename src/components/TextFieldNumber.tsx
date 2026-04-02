@@ -38,9 +38,10 @@ export function TextFieldNumber({
                 e.target.value === "" ? "" : Number(e.target.value),
               )
             }
-            className={`w-full bg-white/[0.04] border rounded-lg px-3 py-2 text-xs text-white/80 placeholder-white/15
-              focus:outline-none focus:bg-white/[0.06] transition-colors
-              ${error ? "border-red-500/40 focus:border-red-500/60" : "border-white/[0.07] focus:border-violet-500/50"}`}
+            className={`w-full bg-white/4 border rounded-lg px-3 py-2 text-xs text-white/80 placeholder-white/15
+  focus:outline-none focus:bg-white/6 transition-colors
+  [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
+  ${error ? "border-red-500/40 focus:border-red-500/60" : "border-white/[0.07] focus:border-violet-500/50"}`}
           />
         )}
       />

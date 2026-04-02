@@ -18,7 +18,9 @@ export const addCustomerSchema = z.object({
     .min(1, "Address is required")
     .max(200, "Max 200 characters"),
 
-  avatar: z.string().url("Must be a valid URL").optional().or(z.literal("")),
+  imageUrl: z.string().url("Must be a valid URL").optional().or(z.literal("")),
+
+  imagePath: z.string().optional(),
 
   city: z.string().min(1, "City is required").max(100, "Max 100 characters"),
 

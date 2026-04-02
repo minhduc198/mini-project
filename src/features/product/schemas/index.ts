@@ -10,8 +10,16 @@ export const productSchema = z.object({
   price: z.number().min(0, "Price must be greater 0").optional(),
   width: z.number().min(0, "Width must be greater 0").optional(),
   height: z.number().min(0, "Height must be greater 0").optional(),
-  thumbnail: z.string().url("Must be a valid URL").optional().or(z.literal("")),
-  image: z.string().url("Must be a valid URL").optional().or(z.literal("")),
+  thumbnailUrl: z
+    .string()
+    .url("Must be a valid URL")
+    .optional()
+    .or(z.literal("")),
+  thumbnailPath: z.string().optional(),
+
+  imageUrl: z.string().url("Must be a valid URL").optional().or(z.literal("")),
+  imagePath: z.string().optional(),
+
   description: z.string().max(500, "Max 500 characters").optional(),
 });
 

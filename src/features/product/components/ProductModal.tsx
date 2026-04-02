@@ -27,6 +27,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, PackagePlus, Pencil } from "lucide-react";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { ImageUploadField } from "@/src/components/ImageUploadField";
 
 type AddMode = {
   mode: "add";
@@ -55,8 +56,10 @@ const EMPTY_VALUES: ProductFormValues = {
   price: undefined,
   width: undefined,
   height: undefined,
-  thumbnail: "",
-  image: "",
+  thumbnailUrl: "",
+  thumbnailPath: "",
+  imageUrl: "",
+  imagePath: "",
   description: "",
 };
 
@@ -84,8 +87,10 @@ export function ProductModal(props: Props) {
         price: d.price ?? 0,
         width: d.width ?? undefined,
         height: d.height ?? undefined,
-        thumbnail: d.thumbnail ?? "",
-        image: d.image ?? "",
+        thumbnailUrl: d.thumbnail ?? "",
+        thumbnailPath: "",
+        imageUrl: d.image ?? "",
+        imagePath: "",
         description: d.description ?? "",
       });
     } else {
@@ -99,10 +104,21 @@ export function ProductModal(props: Props) {
   };
 
   const onFormSubmit = (values: ProductFormValues) => {
+    const payload = {
+      reference: values.reference,
+      inventory_id: values.inventory_id,
+      price: values.price,
+      width: values.width,
+      height: values.height,
+      thumbnail: values.thumbnailUrl,
+      image: values.imageUrl,
+      description: values.description,
+    };
+
     if (isEdit) {
-      props.onSubmit({ id: props.productId, data: values });
+      props.onSubmit({ id: props.productId, data: payload });
     } else {
-      props.onSubmit({ data: values });
+      props.onSubmit({ data: payload });
     }
     handleClose();
   };
@@ -118,7 +134,7 @@ export function ProductModal(props: Props) {
         className="
           w-full max-w-lg p-0 gap-0 border border-white/[0.08] bg-overlay
           rounded-2xl shadow-2xl shadow-black/60 overflow-hidden flex flex-col max-h-[90vh]
-          [&>button]:text-white/25 [&>button]:hover:text-white/60 [&>button]:hover:bg-white/6
+          [&>button]:text-white/25 [&>button]:hover:text-white/60 [&>button]:hover:bg-white/6 no-scrollbar
         "
       >
         <DialogHeader className="flex-row items-center gap-3 px-6 pt-5 pb-4 border-b border-white/[0.07] shrink-0 space-y-0">
@@ -189,18 +205,18 @@ export function ProductModal(props: Props) {
                 </div>
 
                 <div className="col-span-2">
-                  <TextFieldInput
-                    name="thumbnail"
-                    label="Thumbnail URL"
-                    placeholder="https://…"
+                  <ImageUploadField
+                    name="thumbnailUrl"
+                    pathName="thumbnailPath"
+                    label="Thumbnail"
                   />
                 </div>
 
                 <div className="col-span-2">
-                  <TextFieldInput
-                    name="image"
-                    label="Image URL"
-                    placeholder="https://…"
+                  <ImageUploadField
+                    name="imageUrl"
+                    pathName="imagePath"
+                    label="Image"
                   />
                 </div>
 

@@ -21,6 +21,7 @@ import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { TextFieldInput } from "@/src/components/TextFieldInput";
 import { TextFieldNumber } from "@/src/components/TextFieldNumber";
+import { ImageUploadField } from "@/src/components/ImageUploadField";
 
 type AddMode = {
   mode: "add";
@@ -43,7 +44,8 @@ type Props = (AddMode | EditMode) & {
 
 const EMPTY_VALUES: InventoryFormValues = {
   name: "",
-  image: "",
+  imageUrl: "",
+  imagePath: "",
   stock: undefined,
 };
 
@@ -68,7 +70,8 @@ export function InventoryModal(props: Props) {
       const d = props.defaultValues;
       reset({
         name: d.name ?? "",
-        image: d.image ?? "",
+        imageUrl: d.image ?? "",
+        imagePath: "",
         stock: d.stock ?? undefined,
       });
     } else {
@@ -82,10 +85,16 @@ export function InventoryModal(props: Props) {
   };
 
   const onFormSubmit = (values: InventoryFormValues) => {
+    const payload = {
+      name: values.name,
+      image: values.imageUrl,
+      stock: values.stock,
+    };
+
     if (isEdit) {
-      props.onSubmit({ id: props.inventoryId, data: values });
+      props.onSubmit({ id: props.inventoryId, data: payload });
     } else {
-      props.onSubmit({ data: values });
+      props.onSubmit({ data: payload });
     }
     handleClose();
   };
@@ -95,11 +104,11 @@ export function InventoryModal(props: Props) {
       <DialogContent
         className="
           w-full max-w-md p-0 gap-0 border border-white/[0.08] bg-overlay
-          rounded-2xl shadow-2xl shadow-black/60 
+          rounded-2xl shadow-2xl shadow-black/60 overflow-hidden flex flex-col max-h-[90vh]
           [&>button]:text-white/25 [&>button]:hover:text-white/60 [&>button]:hover:bg-white/6
         "
       >
-        <DialogHeader className="flex-row items-center gap-3 px-6 pt-5 pb-4 border-b border-white/[0.07] space-y-0">
+        <DialogHeader className="flex-row items-center gap-3 px-6 pt-5 pb-4 border-b border-white/[0.07] shrink-0 space-y-0">
           <div className="w-8 h-8 rounded-lg bg-violet-500/15 flex items-center justify-center shrink-0">
             {isEdit ? (
               <Pencil size={15} className="text-violet-400" />
@@ -118,18 +127,23 @@ export function InventoryModal(props: Props) {
         </DialogHeader>
 
         <FormProvider {...methods}>
-          <form onSubmit={handleSubmit(onFormSubmit)}>
-            <div className="px-6 py-5 space-y-4">
+          <form
+            onSubmit={handleSubmit(onFormSubmit)}
+            className="flex flex-col flex-1 overflow-hidden"
+          >
+            <div className="overflow-y-auto px-6 py-5 flex-1 space-y-4">
               <TextFieldInput name="name" label="Name" placeholder="Select" />
-              <TextFieldInput
-                name="image"
-                label="Image URL"
-                placeholder="https://…"
+
+              <ImageUploadField
+                name="imageUrl"
+                pathName="imagePath"
+                label="Image"
               />
+
               <TextFieldNumber name="stock" label="Stock" placeholder="0" />
             </div>
 
-            <div className="flex items-center justify-end gap-2.5 px-6 py-4 border-t border-white/[0.07]">
+            <div className="flex items-center justify-end gap-2.5 px-6 py-4 border-t border-white/[0.07] shrink-0">
               <Button
                 type="button"
                 variant="ghost"
