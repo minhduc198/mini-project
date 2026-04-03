@@ -15,6 +15,8 @@ import { InventoryDeleteModal } from "../inventory/components/InventoryDeleteMod
 import { useInventories } from "../inventory/hook/useInventories";
 import { Inventory } from "../inventory/types";
 import { useProducts } from "./hook/useProducts";
+import { queryClient } from "@/src/components/ReactQueryProvider";
+import { productKeys } from "./query-key/product.query-key";
 
 export default function Products() {
   const [productModal, setProductModal] = useState<
@@ -36,7 +38,6 @@ export default function Products() {
     open: false,
     inventoryId: [],
   });
-  const [isUploading, setIsUploading] = useState(false);
 
   const [activeCategoryId, setActiveCategoryId] = useState<string | undefined>(
     undefined,
